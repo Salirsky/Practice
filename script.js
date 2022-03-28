@@ -50,12 +50,12 @@ switch (true) {
   case 15000 <= fullPrice && fullPrice < 30000:
     console.log("Даем скидку в 5%");
     break;
-  case fullPrice < 15000:
+  case fullPrice < 15000 && fullPrice == 0:
     console.log("Скидка не предусмотрена");
     break;
   case fullPrice < 0:
     console.log("Что-то пошло не так");
     break;
   default:
-    console.log("Всё пошло вообще не так");
+    console.log("Вставай, Наташа х)");
 }
