@@ -1,13 +1,10 @@
-let title = "Practice";
+let title = prompt("Как называется ваш проект?");
 let screens = prompt(
   "Какие типы экранов нужно разработать?",
   "Простые, Сложные, Интерактивные"
 );
 let screenPrice = +prompt("Сколько будет стоить данная работа?", "16999");
-let rollback = 20;
-
 let adaptive = confirm("Нужен ли адаптив на сайте?");
-
 let service1 = prompt(
   "Какой дополнительный тип услуги нужен?",
   "Светлая/тёмная темы"
@@ -19,29 +16,13 @@ let service2 = prompt(
 );
 let servicePrice2 = +prompt("Сколько это будет стоить?", "7560");
 
+let rollback = 20;
 let fullPrice = screenPrice + servicePrice1 + servicePrice2;
-
 let servicePercentPrice = Math.ceil(fullPrice - fullPrice * (rollback / 100));
-// let servicePercentPrice2 = (fullPrice - fullPrice * (rollback / 100));
 
-console.log(typeof title);
-console.log(typeof fullPrice);
-console.log(typeof adaptive);
-
-console.log(screens.length);
-
-console.log("Стоимость разработки сайта " + fullPrice + " рублей");
-
-console.log(screens.toLowerCase().split(", "));
-
-console.log(
-  "Процент отката посреднику за работу " +
-    fullPrice * (rollback / 100) +
-    " рублей"
-);
-
-console.log(servicePercentPrice);
-console.log(fullPrice);
+const showTypeOf = function (variable) {
+  console.log(variable, typeof variable);
+};
 
 switch (true) {
   case 30000 <= fullPrice:
@@ -59,3 +40,17 @@ switch (true) {
   default:
     console.log("Вставай, Наташа х)");
 }
+
+console.log(typeof title);
+console.log(typeof fullPrice);
+console.log(typeof adaptive);
+console.log(screens.length);
+console.log("Стоимость разработки сайта " + fullPrice + " рублей");
+console.log(screens.toLowerCase().split(", "));
+console.log(
+  "Процент отката посреднику за работу " +
+    fullPrice * (rollback / 100) +
+    " рублей"
+);
+console.log(servicePercentPrice);
+console.log(fullPrice);
