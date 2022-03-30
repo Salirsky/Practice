@@ -1,4 +1,4 @@
-// "Use strict";
+"Use strict";
 
 //С prompt конечно интереснее, но модальные окна замедляют работу
 
@@ -30,7 +30,7 @@ let servicePrice1 = 9325;
 let service2 = "Переключение языков ru/eng";
 let servicePrice2 = 7560;
 
-let allServicePrices, fullPrice;
+let allServicePrices, fullPrice, servicePercentPrice;
 
 const showTypeOf = function (variable) {
   console.log(variable, typeof variable);
@@ -59,15 +59,9 @@ const getAllServicePrices = function (a, b) {
   return a + b;
 };
 
-allServicePrices = getAllServicePrices(servicePrice1, servicePrice2);
-console.log(allServicePrices);
-
 function getFullPrice(a, b) {
   return a + b;
 }
-
-fullPrice = getFullPrice(screenPrice, allServicePrices);
-console.log(fullPrice);
 
 const getTitle = function (str) {
   if (str.startsWith(" ")) {
@@ -78,35 +72,32 @@ const getTitle = function (str) {
   return str;
 };
 
-title = getTitle(title);
-console.log(title);
-
 const getServicePercentPrices = function (num, rol) {
   return Math.ceil(num - num * (rol / 100));
 };
 
-const servicePercentPrice = getServicePercentPrices(fullPrice, rollback);
-console.log(servicePercentPrice);
+allServicePrices = getAllServicePrices(servicePrice1, servicePrice2);
+fullPrice = getFullPrice(screenPrice, allServicePrices);
+title = getTitle(title);
+servicePercentPrice = getServicePercentPrices(fullPrice, rollback);
 
-//let servicePercentPrice = Math.ceil(fullPrice - fullPrice * (rollback / 100));
+// console.log(allServicePrices);
+// console.log(title);
+// console.log(fullPrice);
+
+//вызовы функции showTypeOf
 showTypeOf(title);
 showTypeOf(fullPrice);
 showTypeOf(adaptive);
 
-console.log(typeof title);
-console.log(typeof fullPrice);
-console.log(typeof adaptive);
-
-console.log(screens.length);
+//вывод строки с типами экранов для разработки screens
 console.log(screens.toLowerCase().split(", "));
 
+//сообщение о скидке пользователю (вызовы функции getRollbackMessage)
 console.log(getRollbackMessage(fullPrice));
-console.log("Стоимость разработки сайта " + fullPrice + " рублей");
-console.log(
-  "Процент отката посреднику за работу " +
-    fullPrice * (rollback / 100) +
-    " рублей"
-);
 
-//console.log(servicePercentPrice);
-//console.log(fullPrice);
+//стоимость за вычетом процента отката посреднику (вызовы функции getServicePercentPrices)
+console.log(servicePercentPrice);
+
+// console.log("Стоимость разработки сайта " + fullPrice + " рублей");
+// console.log( "Процент отката посреднику за работу " + fullPrice * (rollback / 100) + " рублей");
