@@ -1,34 +1,24 @@
 "Use strict";
 
-//С prompt конечно интереснее, но модальные окна замедляют работу
-
-// let title = prompt("Как называется ваш проект?", " КаЛьКулятор Верстки");
-// let screens = prompt(
-//   "Какие типы экранов нужно разработать?",
-//   "Простые, Сложные, Интерактивные"
-// );
-// let screenPrice = +prompt("Сколько будет стоить данная работа?", "16999");
-// let adaptive = confirm("Нужен ли адаптив на сайте?");
-// let service1 = prompt(
-//   "Какой дополнительный тип услуги нужен?",
-//   "Светлая/тёмная темы"
-// );
-// let servicePrice1 = +prompt("Сколько это будет стоить?", "8325");
-// let service2 = prompt(
-//   "Какой дополнительный тип услуги нужен?",
-//   "Переключение языков ru/eng"
-// );
-// let servicePrice2 = +prompt("Сколько это будет стоить?", "7560");
+let title = prompt("Как называется ваш проект?", " КаЛьКулятор Верстки");
+let screens = prompt(
+  "Какие типы экранов нужно разработать?",
+  "Простые, Сложные, Интерактивные"
+);
+let screenPrice = +prompt("Сколько будет стоить данная работа?", "16999");
+let adaptive = confirm("Нужен ли адаптив на сайте?");
+let service1 = prompt(
+  "Какой дополнительный тип услуги нужен?",
+  "Светлая/тёмная темы"
+);
+let servicePrice1 = +prompt("Сколько это будет стоить?", "8325");
+let service2 = prompt(
+  "Какой дополнительный тип услуги нужен?",
+  "Переключение языков ru/eng"
+);
+let servicePrice2 = +prompt("Сколько это будет стоить?", "7560");
 
 let rollback = 20;
-let title = " КаЛьКулятор Верстки";
-let screens = "Простые, Сложные, Интерактивные";
-let screenPrice = 16999;
-let adaptive = true;
-let service1 = "Светлая/тёмная темы";
-let servicePrice1 = 9325;
-let service2 = "Переключение языков ru/eng";
-let servicePrice2 = 7560;
 
 let allServicePrices, fullPrice, servicePercentPrice;
 
@@ -81,10 +71,6 @@ fullPrice = getFullPrice(screenPrice, allServicePrices);
 title = getTitle(title);
 servicePercentPrice = getServicePercentPrices(fullPrice, rollback);
 
-// console.log(allServicePrices);
-// console.log(title);
-// console.log(fullPrice);
-
 //вызовы функции showTypeOf
 showTypeOf(title);
 showTypeOf(fullPrice);
@@ -98,6 +84,3 @@ console.log(getRollbackMessage(fullPrice));
 
 //стоимость за вычетом процента отката посреднику (вызовы функции getServicePercentPrices)
 console.log(servicePercentPrice);
-
-// console.log("Стоимость разработки сайта " + fullPrice + " рублей");
-// console.log( "Процент отката посреднику за работу " + fullPrice * (rollback / 100) + " рублей");
