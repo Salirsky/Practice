@@ -1,7 +1,7 @@
-"Use strict";
+// "Use strict";
 
 let title = prompt("Как называется ваш проект?");
-let screens = +prompt(
+let screens = prompt(
   "Какие типы экранов нужно разработать?",
   "Простые, Сложные, Интерактивные"
 );
@@ -45,9 +45,20 @@ const getRollbackMessage = function (price) {
   }
 };
 
+const getAllServicePrices = function () {
+  const allServicePrices = servicePrice1 + servicePrice2;
+};
+
 showTypeOf(title);
 showTypeOf(fullPrice);
 showTypeOf(adaptive);
+
+console.log(typeof title);
+console.log(typeof fullPrice);
+console.log(typeof adaptive);
+
+console.log(screens.length);
+console.log(screens.toLowerCase().split(", "));
 
 console.log(getRollbackMessage(fullPrice));
 console.log("Стоимость разработки сайта " + fullPrice + " рублей");
