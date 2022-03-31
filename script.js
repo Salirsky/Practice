@@ -84,3 +84,5 @@ console.log(getRollbackMessage(fullPrice));
 
 //стоимость за вычетом процента отката посреднику (вызовы функции getServicePercentPrices)
 console.log(servicePercentPrice);
+
+//Новый коммент для проверки
