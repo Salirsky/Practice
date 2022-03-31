@@ -18,28 +18,46 @@ let allServicePrices, fullPrice, servicePercentPrice;
 let service1;
 let service2;
 
-const isNumber = function (num) {
-  return !isNaN(parseFloat(num)) && isFinite(num);
+const isNumber1 = function (num) {
+  return (
+    !isNaN(parseFloat(num)) &&
+    isFinite(num) &&
+    typeof num !== "object" &&
+    typeof num !== "undefined"
+  );
+};
+
+const isNumber2 = function (num) {
+  if (typeof str == "number") {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+const isString = function (str) {
+  if (typeof str == "string") {
+    return true;
+  } else {
+    return false;
+  }
 };
 
 const asking = function () {
-  title = prompt("Как называется ваш проект?", " КаЛьКулятор Верстки");
-  screens = prompt(
-    "Какие типы экранов нужно разработать?",
-    "Простые, Сложные, Интерактивные"
-  );
+  do {
+    title = prompt("Как называется ваш проект?", " КаЛьКулятор Верстки");
+  } while (!isString(title));
 
-  screenPrice = +prompt("Сколько будет стоить данная работа?", "16999");
+  do {
+    screens = prompt(
+      "Какие типы экранов нужно разработать?",
+      "Простые, Сложные, Интерактивные"
+    );
+  } while (!isString(screens));
 
-  while (
-    !isNumber(screenPrice)
-    // isNaN(screenPrice) ||
-    // screenPrice.trim() === "" ||
-    // screenPrice === null
-    // Много проверок - много возможных ошибок. Есть решение изящнее.
-  ) {
+  do {
     screenPrice = +prompt("Сколько будет стоить данная работа?", "16999");
-  }
+  } while (!isNumber1(screenPrice));
 
   adaptive = confirm("Нужен ли адаптив на сайте?");
 };
@@ -59,7 +77,9 @@ const getAllServicePrices = function () {
         "Переключение языков ru/eng"
       );
     }
-    sum += +prompt("Сколько это будет стоить?", "5999");
+    do {
+      sum += +prompt("Сколько это будет стоить?", "5999");
+    } while (!isNumber1(sum));
   }
   return sum;
   // return servicePrice1 + servicePrice1;
