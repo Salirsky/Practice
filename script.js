@@ -59,6 +59,9 @@ const asking = function () {
     screenPrice = +prompt("Сколько будет стоить данная работа?", "16999");
   } while (!isNumber1(screenPrice));
 
+  // Сейчас - isNumber1 - если ввести неподходящее значение, код зациклится и зависнет - поменять сам цикл do while
+  // И не реагирует на отмену - поменять тело функции isNumber
+
   adaptive = confirm("Нужен ли адаптив на сайте?");
 };
 
