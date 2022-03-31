@@ -1,38 +1,68 @@
 "Use strict";
 
-// let title = prompt("Как называется ваш проект?", " КаЛьКулятор Верстки");
-// let screens = prompt(
-//   "Какие типы экранов нужно разработать?",
-//   "Простые, Сложные, Интерактивные"
-// );
-// let screenPrice = +prompt("Сколько будет стоить данная работа?", "16999");
-// let adaptive = confirm("Нужен ли адаптив на сайте?");
-
-let title = " КаЛьКулятор Верстки";
-let screens = "Простые, Сложные, Интерактивные";
-let screenPrice = 16999;
-let adaptive = true;
+// let title = " КаЛьКулятор Верстки";
+// let screens = "Простые, Сложные, Интерактивные";
+// let screenPrice = 16999;
+// let adaptive = true;
 // let service1 = "Светлая/тёмная темы";
 // let servicePrice1 = 9325;
 // let service2 = "Переключение языков ru/eng";
 // let servicePrice2 = 7560;
-
 let rollback = 20;
+
+let title;
+let screens;
+let screenPrice;
+let adaptive;
 let allServicePrices, fullPrice, servicePercentPrice;
+let service1;
+let service2;
 
-let service1 = prompt(
-  "Какой дополнительный тип услуги нужен?",
-  "Светлая/тёмная темы"
-);
-let servicePrice1 = +prompt("Сколько это будет стоить?", "8325");
-let service2 = prompt(
-  "Какой дополнительный тип услуги нужен?",
-  "Переключение языков ru/eng"
-);
-let servicePrice2 = +prompt("Сколько это будет стоить?", "7560");
+const isNumber = function (num) {
+  return !isNaN(parseFloat(num)) && isFinite(num);
+};
 
-const getAllServicePrices = function (a, b) {
-  return a + b;
+const asking = function () {
+  title = prompt("Как называется ваш проект?", " КаЛьКулятор Верстки");
+  screens = prompt(
+    "Какие типы экранов нужно разработать?",
+    "Простые, Сложные, Интерактивные"
+  );
+
+  screenPrice = +prompt("Сколько будет стоить данная работа?", "16999");
+
+  while (
+    !isNumber(screenPrice)
+    // isNaN(screenPrice) ||
+    // screenPrice.trim() === "" ||
+    // screenPrice === null
+    // Много проверок - много возможных ошибок. Есть решение изящнее.
+  ) {
+    screenPrice = +prompt("Сколько будет стоить данная работа?", "16999");
+  }
+
+  adaptive = confirm("Нужен ли адаптив на сайте?");
+};
+
+const getAllServicePrices = function () {
+  let sum = 0;
+
+  for (let i = 0; i < 2; i++) {
+    if (i === 0) {
+      service1 = prompt(
+        "Какой дополнительный тип услуги нужен?",
+        "Светлая/тёмная темы"
+      );
+    } else if (i === 1) {
+      service2 = prompt(
+        "Какой дополнительный тип услуги нужен?",
+        "Переключение языков ru/eng"
+      );
+    }
+    sum += +prompt("Сколько это будет стоить?", "5999");
+  }
+  return sum;
+  // return servicePrice1 + servicePrice1;
 };
 
 const showTypeOf = function (variable) {
@@ -58,31 +88,33 @@ const getRollbackMessage = function (price) {
   }
 };
 
-function getFullPrice(a, b) {
-  return a + b;
+function getFullPrice() {
+  return screenPrice + allServicePrices;
 }
 
-const getTitle = function (str) {
-  if (str.startsWith(" ")) {
-    str = str.trim();
-  }
-  str = str.toLowerCase();
-  str = str.charAt(0).toUpperCase() + str.slice(1);
-  return str;
+const getTitle = function () {
+  title = title.trim();
+  title = title.toLowerCase();
+  title = title.charAt(0).toUpperCase() + title.slice(1);
+  return title;
 };
 
-const getServicePercentPrices = function (num, rol) {
-  return Math.ceil(num - num * (rol / 100));
+const getServicePercentPrices = function () {
+  return Math.ceil(fullPrice - fullPrice * (rollback / 100));
 };
 
-allServicePrices = getAllServicePrices(servicePrice1, servicePrice2);
-fullPrice = getFullPrice(screenPrice, allServicePrices);
-title = getTitle(title);
-servicePercentPrice = getServicePercentPrices(fullPrice, rollback);
+asking();
+
+allServicePrices = getAllServicePrices();
+fullPrice = getFullPrice();
+title = getTitle();
+servicePercentPrice = getServicePercentPrices();
 
 showTypeOf(title);
 showTypeOf(fullPrice);
 showTypeOf(adaptive);
+
+console.log("allServicePrices", allServicePrices);
 
 console.log(getRollbackMessage(fullPrice));
 console.log(typeof title);
