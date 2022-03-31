@@ -1,12 +1,25 @@
 "Use strict";
 
-let title = prompt("Как называется ваш проект?", " КаЛьКулятор Верстки");
-let screens = prompt(
-  "Какие типы экранов нужно разработать?",
-  "Простые, Сложные, Интерактивные"
-);
-let screenPrice = +prompt("Сколько будет стоить данная работа?", "16999");
-let adaptive = confirm("Нужен ли адаптив на сайте?");
+// let title = prompt("Как называется ваш проект?", " КаЛьКулятор Верстки");
+// let screens = prompt(
+//   "Какие типы экранов нужно разработать?",
+//   "Простые, Сложные, Интерактивные"
+// );
+// let screenPrice = +prompt("Сколько будет стоить данная работа?", "16999");
+// let adaptive = confirm("Нужен ли адаптив на сайте?");
+
+let title = " КаЛьКулятор Верстки";
+let screens = "Простые, Сложные, Интерактивные";
+let screenPrice = 16999;
+let adaptive = true;
+// let service1 = "Светлая/тёмная темы";
+// let servicePrice1 = 9325;
+// let service2 = "Переключение языков ru/eng";
+// let servicePrice2 = 7560;
+
+let rollback = 20;
+let allServicePrices, fullPrice, servicePercentPrice;
+
 let service1 = prompt(
   "Какой дополнительный тип услуги нужен?",
   "Светлая/тёмная темы"
@@ -18,9 +31,9 @@ let service2 = prompt(
 );
 let servicePrice2 = +prompt("Сколько это будет стоить?", "7560");
 
-let rollback = 20;
-
-let allServicePrices, fullPrice, servicePercentPrice;
+const getAllServicePrices = function (a, b) {
+  return a + b;
+};
 
 const showTypeOf = function (variable) {
   console.log(variable, typeof variable);
@@ -45,10 +58,6 @@ const getRollbackMessage = function (price) {
   }
 };
 
-const getAllServicePrices = function (a, b) {
-  return a + b;
-};
-
 function getFullPrice(a, b) {
   return a + b;
 }
@@ -71,16 +80,29 @@ fullPrice = getFullPrice(screenPrice, allServicePrices);
 title = getTitle(title);
 servicePercentPrice = getServicePercentPrices(fullPrice, rollback);
 
-//вызовы функции showTypeOf
 showTypeOf(title);
 showTypeOf(fullPrice);
 showTypeOf(adaptive);
 
-//вывод строки с типами экранов для разработки screens
-console.log(screens.toLowerCase().split(", "));
-
-//сообщение о скидке пользователю (вызовы функции getRollbackMessage)
 console.log(getRollbackMessage(fullPrice));
+console.log(typeof title);
+console.log(typeof fullPrice);
+console.log(typeof adaptive);
 
-//стоимость за вычетом процента отката посреднику (вызовы функции getServicePercentPrices)
-console.log(servicePercentPrice);
+console.log(screens.length);
+console.log(
+  "Стоимость вёрстки экранов " +
+    screenPrice +
+    " рублей и стоимость разработки сайта " +
+    fullPrice +
+    " рублей"
+);
+
+// console.log(screens.toLowerCase().split(", "));
+// console.log(servicePercentPrice);
+// console.log("Стоимость разработки сайта " + fullPrice + " рублей");
+// console.log(screens.toLowerCase().split(", "));
+// console.log(  "Процент отката посреднику за работу " +
+//     fullPrice * (rollback / 100) +
+//     " рублей"
+// );
