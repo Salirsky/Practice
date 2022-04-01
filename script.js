@@ -19,12 +19,7 @@ let service1;
 let service2;
 
 const isNumber1 = function (num) {
-  return (
-    !isNaN(parseFloat(num)) &&
-    isFinite(num) &&
-    typeof num !== "object" &&
-    typeof num !== "undefined"
-  );
+  return !isNaN(parseFloat(num)) && isFinite(num);
 };
 
 const isNumber2 = function (num) {
