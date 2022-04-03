@@ -1,13 +1,5 @@
 "Use strict";
 
-// let title = " КаЛьКулятор Верстки";
-// let screens = "Простые, Сложные, Интерактивные";
-// let screenPrice = 16999;
-// let adaptive = true;
-// let service1 = "Светлая/тёмная темы";
-// let servicePrice1 = 9325;
-// let service2 = "Переключение языков ru/eng";
-// let servicePrice2 = 7560;
 let rollback = 20;
 
 let title;
@@ -22,27 +14,6 @@ let servPrice;
 const isNumber1 = function (num) {
   return !Number.isNaN(parseFloat(num)) && isFinite(num);
 };
-
-//return !isNaN(parseFloat(num)) && isFinite(num);
-// if (num === null || num === "") {
-//   return false;
-// }
-// if (typeof str == "number") {
-//   return false;
-// } else {
-//   return true;
-// }
-// Результат вывода - true, если передано число.
-// Функция создаётся, чтобы узнать, является ли числом переданное значение. Если передаем число - то ответ - True, иначе - false
-// isFinite(num) Проверяет, является ли переданное в него значение конечным числом, она никогда не пропустит значение "infinity", isNaN, строку, не явялющуюся числом.
-
-// const isNumber2 = function (num) {
-//   if (typeof str == "number") {
-//     return true;
-//   } else {
-//     return false;
-//   }
-// };
 
 const isString = function (str) {
   if (typeof str == "string") {
@@ -66,11 +37,7 @@ const asking = function () {
 
   do {
     screenPrice = +prompt("Сколько будет стоить данная работа?", "20000");
-  } while (!isNumber1(screenPrice)); // Сейчас - нормально отрабатывает
-
-  // Результат выполнения функции isNumber - true, так что мы её реверсируем
-  // Сейчас - isNumber1 - если ввести неподходящее значение, код зациклится и зависнет - поменять сам цикл do while
-  // И не реагирует на отмену - поменять тело функции isNumber
+  } while (!isNumber1(screenPrice));
 
   adaptive = confirm("Нужен ли адаптив на сайте?");
 };
@@ -96,7 +63,6 @@ const getAllServicePrices = function () {
     sum += servPrice;
   }
   return sum;
-  // return servicePrice1 + servicePrice1;
 };
 
 const showTypeOf = function (variable) {
