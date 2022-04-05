@@ -1,15 +1,43 @@
 "Use strict";
 
-let rollback = 20;
+const appData = {
+  rollback: 20,
+  title: "",
+  screens: "",
+  screenPrice: 0,
+  adaptive: true,
+  allServicePrices: 0,
+  fullPrice: 0,
+  servicePercentPrice: 0,
+  service1: "",
+  service2: "",
+  servPrice: 0,
 
-let title;
-let screens;
-let screenPrice;
-let adaptive;
-let allServicePrices, fullPrice, servicePercentPrice;
-let service1;
-let service2;
-let servPrice;
+  asking: function () {
+    do {
+      appData.title = prompt(
+        "Как называется ваш проект?",
+        " КаЛьКулятор Верстки"
+      );
+    } while (!isString(appData.title));
+
+    do {
+      appData.screens = prompt(
+        "Какие типы экранов нужно разработать?",
+        "Простые, Сложные, Интерактивные"
+      );
+    } while (!isString(appData.screens));
+
+    do {
+      appData.screenPrice = +prompt(
+        "Сколько будет стоить данная работа?",
+        "20000"
+      );
+    } while (!isNumber(appData.screenPrice));
+
+    appData.adaptive = confirm("Нужен ли адаптив на сайте?");
+  },
+};
 
 const isNumber = function (num) {
   return !isNaN(parseFloat(num)) && isFinite(num);
@@ -23,45 +51,25 @@ const isString = function (str) {
   }
 };
 
-const asking = function () {
-  do {
-    title = prompt("Как называется ваш проект?", " КаЛьКулятор Верстки");
-  } while (!isString(title));
-
-  do {
-    screens = prompt(
-      "Какие типы экранов нужно разработать?",
-      "Простые, Сложные, Интерактивные"
-    );
-  } while (!isString(screens));
-
-  do {
-    screenPrice = +prompt("Сколько будет стоить данная работа?", "20000");
-  } while (!isNumber(screenPrice));
-
-  adaptive = confirm("Нужен ли адаптив на сайте?");
-};
-
 const getAllServicePrices = function () {
   let sum = 0;
 
   for (let i = 0; i < 2; i++) {
-    let price = 0;
     if (i === 0) {
-      service1 = prompt(
+      appData.service1 = prompt(
         "Какой дополнительный тип услуги нужен?",
         "Светлая/тёмная темы"
       );
     } else if (i === 1) {
-      service2 = prompt(
+      appData.service2 = prompt(
         "Какой дополнительный тип услуги нужен?",
         "Переключение языков ru/eng"
       );
     }
     do {
-      servPrice = +prompt("Сколько это будет стоить?", "6000");
-    } while (!isNumber(servPrice));
-    sum += servPrice;
+      appData.servPrice = +prompt("Сколько это будет стоить?", "6000");
+    } while (!isNumber(appData.servPrice));
+    sum += appData.servPrice;
   }
   return sum;
 };
@@ -86,48 +94,29 @@ const getRollbackMessage = function (price) {
 };
 
 function getFullPrice() {
-  return screenPrice + allServicePrices;
+  return appData.screenPrice + appData.allServicePrices;
 }
 
 const getTitle = function () {
-  title = title.trim();
-  title = title.toLowerCase();
-  title = title.charAt(0).toUpperCase() + title.slice(1);
-  return title;
+  appData.title = appData.title.trim();
+  appData.title = appData.title.toLowerCase();
+  appData.title =
+    appData.title.charAt(0).toUpperCase() + appData.title.slice(1);
+  return appData.title;
 };
 
 const getServicePercentPrices = function () {
-  return Math.ceil(fullPrice - fullPrice * (rollback / 100));
+  return Math.ceil(
+    appData.fullPrice - appData.fullPrice * (appData.rollback / 100)
+  );
 };
 
-asking();
+appData.asking();
 
-allServicePrices = getAllServicePrices();
-fullPrice = getFullPrice();
-title = getTitle();
-servicePercentPrice = getServicePercentPrices();
+appData.allServicePrices = getAllServicePrices();
+appData.fullPrice = getFullPrice();
+appData.title = getTitle();
+appData.servicePercentPrice = getServicePercentPrices();
 
-console.log("allServicePrices", allServicePrices);
-
-console.log(getRollbackMessage(fullPrice));
-console.log(typeof title);
-console.log(typeof fullPrice);
-console.log(typeof adaptive);
-
-console.log(screens.length);
-console.log(
-  "Стоимость вёрстки экранов " +
-    screenPrice +
-    " рублей и стоимость разработки сайта " +
-    fullPrice +
-    " рублей"
-);
-
-// console.log(screens.toLowerCase().split(", "));
-// console.log(servicePercentPrice);
-// console.log("Стоимость разработки сайта " + fullPrice + " рублей");
-// console.log(screens.toLowerCase().split(", "));
-// console.log(  "Процент отката посреднику за работу " +
-//     fullPrice * (rollback / 100) +
-//     " рублей"
-// );
+console.log(appData.fullPrice);
+console.log(appData.servicePercentPrice);
