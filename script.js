@@ -11,8 +11,8 @@ let service1;
 let service2;
 let servPrice;
 
-const isNumber1 = function (num) {
-  return !Number.isNaN(parseFloat(num)) && isFinite(num);
+const isNumber = function (num) {
+  return !isNaN(parseFloat(num)) && isFinite(num);
 };
 
 const isString = function (str) {
@@ -37,7 +37,7 @@ const asking = function () {
 
   do {
     screenPrice = +prompt("Сколько будет стоить данная работа?", "20000");
-  } while (!isNumber1(screenPrice));
+  } while (!isNumber(screenPrice));
 
   adaptive = confirm("Нужен ли адаптив на сайте?");
 };
@@ -46,6 +46,7 @@ const getAllServicePrices = function () {
   let sum = 0;
 
   for (let i = 0; i < 2; i++) {
+    let price = 0;
     if (i === 0) {
       service1 = prompt(
         "Какой дополнительный тип услуги нужен?",
@@ -59,14 +60,10 @@ const getAllServicePrices = function () {
     }
     do {
       servPrice = +prompt("Сколько это будет стоить?", "6000");
-    } while (!isNumber1(servPrice));
+    } while (!isNumber(servPrice));
     sum += servPrice;
   }
   return sum;
-};
-
-const showTypeOf = function (variable) {
-  console.log(variable, typeof variable);
 };
 
 const getRollbackMessage = function (price) {
@@ -109,10 +106,6 @@ allServicePrices = getAllServicePrices();
 fullPrice = getFullPrice();
 title = getTitle();
 servicePercentPrice = getServicePercentPrices();
-
-showTypeOf(title);
-showTypeOf(fullPrice);
-showTypeOf(adaptive);
 
 console.log("allServicePrices", allServicePrices);
 
