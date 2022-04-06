@@ -1,3 +1,4 @@
+
 "Use strict";
 
 let title = prompt("Как называется ваш проект?", " КаЛьКулятор Верстки");
@@ -85,4 +86,3 @@ console.log(getRollbackMessage(fullPrice));
 //стоимость за вычетом процента отката посреднику (вызовы функции getServicePercentPrices)
 console.log(servicePercentPrice);
 
-//Новый коммент для проверки
