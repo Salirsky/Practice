@@ -29,29 +29,50 @@ const appData = {
         "Как называется ваш проект?",
         " КаЛьКулятор Верстки"
       );
-    } while (!appData.isString(appData.title));
+    } while (
+      appData.dataTypeCheck(appData.title) == "empty" ||
+      appData.dataTypeCheck(appData.title) == "number"
+    );
+    // } while (!appData.isString(appData.title));
 
     for (let i = 0; i < 2; i++) {
-      let name = prompt("Какие типы экранов нужно разработать?", "Простые");
+      let name;
+      do {
+        name = prompt(
+          "Какие типы экранов нужно разработать?",
+          "Простые/Сложные/Интерактивные"
+        );
+      } while (
+        appData.dataTypeCheck(name) == "empty" ||
+        appData.dataTypeCheck(name) == "number"
+      );
       let price = 0;
       do {
-        price = +prompt("Сколько будет стоить данная работа?", "20000");
-      } while (!appData.isNumber(appData.screenPrice));
+        price = prompt("Сколько будет стоить данная работа?", "20000");
+      } while (!(appData.dataTypeCheck(price) == "number"));
+      //} while (!appData.isNumber(appData.screenPrice));
 
-      appData.screens.push({ id: i, name: name, price: price }); // Внутрь массива сохраняем элемент в виде объекта, у которого будет идентификатор, имя и стоимость
+      appData.screens.push({ id: i, name: name, price: +price }); // Внутрь массива сохраняем элемент в виде объекта, у которого будет идентификатор, имя и стоимость
     }
 
     for (let i = 0; i < 2; i++) {
       // Воспользоваться итератором (переменной i), чтобы решить проблему схлопывания name в случае одинакового названия
-      let name = prompt(
-        "Какой дополнительный тип услуги нужен?",
-        "Светлая/тёмная темы"
+      let name;
+      do {
+        name = prompt(
+          "Какой дополнительный тип услуги нужен?",
+          "Светлая/тёмная темы"
+        );
+      } while (
+        appData.dataTypeCheck(name) == "empty" ||
+        appData.dataTypeCheck(name) == "number"
       );
       let price = 0;
 
       do {
         price = prompt("Сколько это будет стоить?", "6000");
-      } while (!appData.isNumber(price));
+      } while (!(appData.dataTypeCheck(price) == "number"));
+      //} while (!appData.isNumber(price));
 
       appData.services[name] = +price; // В виде ключа указываем переменную name, в виде значения - price. Таким образом мы собрали в объект servises все ответы на вопросы пользователю
     }
@@ -70,15 +91,28 @@ const appData = {
     }
   },
 
-  isNumber: function (num) {
-    return !isNaN(parseFloat(num)) && isFinite(num);
-  },
+  // isNumber: function (num) {
+  //   return !isNaN(parseFloat(num)) && isFinite(num);
+  // },
 
-  isString: function (str) {
-    if (typeof str == "string") {
-      return true;
+  // isString: function (str) {
+  //   if (typeof str == "string") {
+  //     return true;
+  //   } else if (!(!Number.isNaN(parseFloat(str)) && isFinite(str))) {
+  //     return false;
+  //   }
+
+  // },
+
+  dataTypeCheck: function (data) {
+    if (data === null || data === "") {
+      return "empty";
+    } else if (!Number.isNaN(parseFloat(data)) && isFinite(data)) {
+      return "number";
+    } else if (!(!Number.isNaN(parseFloat(data)) && isFinite(data))) {
+      return "string";
     } else {
-      return false;
+      return "weird";
     }
   },
 
