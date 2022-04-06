@@ -9,9 +9,8 @@ const appData = {
   allServicePrices: 0,
   fullPrice: 0,
   servicePercentPrice: 0,
-  service1: "",
-  service2: "",
-  servPrice: 0,
+  // servPrice: 0,
+  services: {},
 
   // Убрали все переопределения функций и теперь этот метод нужен только для вызова всех функций в нужном порядке.
   start: function () {
@@ -20,7 +19,7 @@ const appData = {
     appData.getAllServicePrices();
     appData.getFullPrice();
     appData.getTitle();
-    appData.getServicePercentPrices();
+    appData.getServicePercentPrice();
 
     appData.logger();
   },
@@ -47,6 +46,21 @@ const appData = {
       );
     } while (!appData.isNumber(appData.screenPrice));
 
+    for (let i = 0; i < 2; i++) {
+      // Воспользоваться итератором (переменной i), чтобы решить проблему схлопывания name в случае одинакового названия
+      let name = prompt(
+        "Какой дополнительный тип услуги нужен?",
+        "Светлая/тёмная темы"
+      );
+      let price = 0;
+
+      do {
+        price = prompt("Сколько это будет стоить?", "6000");
+      } while (!appData.isNumber(price));
+
+      appData.services[name] = +price; // В виде ключа указываем переменную name, в виде значения - price. Таким образом мы собрали в объект servises все ответы на вопросы пользователю
+    }
+
     appData.adaptive = confirm("Нужен ли адаптив на сайте?");
   },
 
@@ -62,27 +76,16 @@ const appData = {
     }
   },
 
+  // Должен считать сумму всех доп. услуг. Функции стоит делать что-то одно, либо считать, либо задавать вопросы. Надо её отрефакторить.
+  // Название и цену стоит записывать в объект в виде пар ключ:значение
+  // Тогда мы сможем вопросы перенести в asking, а в функции оставить расчёты - это будет вернее с точки зрения логики
   getAllServicePrices: function () {
-    let sum = 0;
-
-    for (let i = 0; i < 2; i++) {
-      if (i === 0) {
-        appData.service1 = prompt(
-          "Какой дополнительный тип услуги нужен?",
-          "Светлая/тёмная темы"
-        );
-      } else if (i === 1) {
-        appData.service2 = prompt(
-          "Какой дополнительный тип услуги нужен?",
-          "Переключение языков ru/eng"
-        );
-      }
-      do {
-        appData.servPrice = +prompt("Сколько это будет стоить?", "6000");
-      } while (!appData.isNumber(appData.servPrice));
-      sum += appData.servPrice;
+    // Т.к на момент запуска данного метода у нас уже будет существовать объект с ответами на вопросы,
+    // Нам остаётся перебрать этот объект циклом for---in и просто суммировать стоимость
+    for (let key in appData.services) {
+      appData.allServicePrices += appData.services[key];
     }
-    appData.allServicePrices = sum;
+    // Таким образом, в св-ва allServicePrices попадёт сумма всех значений из appData.services
   },
 
   getRollbackMessage: function (price) {
@@ -115,7 +118,7 @@ const appData = {
       appData.title.charAt(0).toUpperCase() + appData.title.slice(1);
   },
 
-  getServicePercentPrices: function () {
+  getServicePercentPrice: function () {
     appData.servicePercentPrice = Math.ceil(
       appData.fullPrice - appData.fullPrice * (appData.rollback / 100)
     );
@@ -125,9 +128,9 @@ const appData = {
     console.log(appData.fullPrice);
     console.log(appData.servicePercentPrice);
 
-    for (let key in appData) {
-      console.log(key);
-    }
+    // for (let key in appData) {
+    //   console.log(key);
+    // }
   },
 }; // AppData
 
