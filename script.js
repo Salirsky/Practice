@@ -16,7 +16,6 @@ const appData = {
   start: function () {
     appData.asking();
     appData.addPrices();
-    appData.getAllServicePrices();
     appData.getFullPrice();
     appData.getTitle();
     appData.getServicePercentPrice();
@@ -65,6 +64,10 @@ const appData = {
     for (let screen of appData.screens) {
       appData.screenPrice += screen.price;
     }
+
+    for (let key in appData.services) {
+      appData.allServicePrices += appData.services[key];
+    }
   },
 
   isNumber: function (num) {
@@ -82,14 +85,12 @@ const appData = {
   // Должен считать сумму всех доп. услуг. Функции стоит делать что-то одно, либо считать, либо задавать вопросы. Надо её отрефакторить.
   // Название и цену стоит записывать в объект в виде пар ключ:значение
   // Тогда мы сможем вопросы перенести в asking, а в функции оставить расчёты - это будет вернее с точки зрения логики
-  getAllServicePrices: function () {
-    // Т.к на момент запуска данного метода у нас уже будет существовать объект с ответами на вопросы,
-    // Нам остаётся перебрать этот объект циклом for---in и просто суммировать стоимость
-    for (let key in appData.services) {
-      appData.allServicePrices += appData.services[key];
-    }
-    // Таким образом, в св-ва allServicePrices попадёт сумма всех значений из appData.services
-  },
+  //getAllServicePrices: function () {
+  // Т.к на момент запуска данного метода у нас уже будет существовать объект с ответами на вопросы,
+  // Нам остаётся перебрать этот объект циклом for---in и просто суммировать стоимость
+
+  // Таким образом, в св-ва allServicePrices попадёт сумма всех значений из appData.services
+  //},
 
   getRollbackMessage: function (price) {
     switch (true) {
