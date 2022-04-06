@@ -13,6 +13,18 @@ const appData = {
   service2: "",
   servPrice: 0,
 
+  start: function () {
+    // Убрали все переопределения функций и теперь этот метод нужен только для вызова всех функций в нужном порядке
+    appData.asking();
+
+    appData.getAllServicePrices();
+    appData.getFullPrice();
+    appData.getTitle();
+    appData.getServicePercentPrices();
+
+    appData.logger();
+  },
+
   asking: function () {
     do {
       appData.title = prompt(
@@ -70,7 +82,7 @@ const appData = {
       } while (!appData.isNumber(appData.servPrice));
       sum += appData.servPrice;
     }
-    return sum;
+    appData.allServicePrices = sum;
   },
 
   getRollbackMessage: function (price) {
@@ -93,7 +105,7 @@ const appData = {
   },
 
   getFullPrice: function () {
-    return appData.screenPrice + appData.allServicePrices;
+    appData.fullPrice = appData.screenPrice + appData.allServicePrices;
   },
 
   getTitle: function () {
@@ -101,24 +113,12 @@ const appData = {
     appData.title = appData.title.toLowerCase();
     appData.title =
       appData.title.charAt(0).toUpperCase() + appData.title.slice(1);
-    return appData.title;
   },
 
   getServicePercentPrices: function () {
-    return Math.ceil(
+    appData.servicePercentPrice = Math.ceil(
       appData.fullPrice - appData.fullPrice * (appData.rollback / 100)
     );
-  },
-
-  start: function () {
-    appData.asking();
-
-    appData.allServicePrices = appData.getAllServicePrices();
-    appData.fullPrice = appData.getFullPrice();
-    appData.title = appData.getTitle();
-    appData.servicePercentPrice = appData.getServicePercentPrices();
-
-    appData.logger();
   },
 
   logger: function () {
@@ -132,3 +132,5 @@ const appData = {
 }; // AppData
 
 appData.start();
+
+console.log(appData.title);
