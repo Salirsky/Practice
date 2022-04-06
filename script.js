@@ -3,7 +3,7 @@
 const appData = {
   rollback: 20,
   title: "",
-  screens: "",
+  screens: [],
   screenPrice: 0,
   adaptive: true,
   allServicePrices: 0,
@@ -15,7 +15,7 @@ const appData = {
   // Убрали все переопределения функций и теперь этот метод нужен только для вызова всех функций в нужном порядке.
   start: function () {
     appData.asking();
-
+    appData.addPrices();
     appData.getAllServicePrices();
     appData.getFullPrice();
     appData.getTitle();
@@ -32,19 +32,15 @@ const appData = {
       );
     } while (!appData.isString(appData.title));
 
-    do {
-      appData.screens = prompt(
-        "Какие типы экранов нужно разработать?",
-        "Простые, Сложные, Интерактивные"
-      );
-    } while (!appData.isString(appData.screens));
+    for (let i = 0; i < 2; i++) {
+      let name = prompt("Какие типы экранов нужно разработать?", "Простые");
+      let price = 0;
+      do {
+        price = +prompt("Сколько будет стоить данная работа?", "20000");
+      } while (!appData.isNumber(appData.screenPrice));
 
-    do {
-      appData.screenPrice = +prompt(
-        "Сколько будет стоить данная работа?",
-        "20000"
-      );
-    } while (!appData.isNumber(appData.screenPrice));
+      appData.screens.push({ id: i, name: name, price: price }); // Внутрь массива сохраняем элемент в виде объекта, у которого будет идентификатор, имя и стоимость
+    }
 
     for (let i = 0; i < 2; i++) {
       // Воспользоваться итератором (переменной i), чтобы решить проблему схлопывания name в случае одинакового названия
@@ -62,6 +58,13 @@ const appData = {
     }
 
     appData.adaptive = confirm("Нужен ли адаптив на сайте?");
+  },
+  // Этот метод будет заниматься высчитыванием стоимости услуг и экранов
+  addPrices: function () {
+    //Реализовать методом reduce
+    for (let screen of appData.screens) {
+      appData.screenPrice += screen.price;
+    }
   },
 
   isNumber: function (num) {
@@ -127,6 +130,7 @@ const appData = {
   logger: function () {
     console.log(appData.fullPrice);
     console.log(appData.servicePercentPrice);
+    console.log(appData.screens);
 
     // for (let key in appData) {
     //   console.log(key);
