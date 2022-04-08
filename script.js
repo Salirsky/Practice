@@ -18,19 +18,19 @@ const inputTotalInput5 = document.getElementsByClassName("total-input")[4];
 
 let screens = document.querySelectorAll("screen");
 
-console.log(title);
-console.log(buttons);
-console.log(buttonPlus);
-console.log(otherItemsPercent);
-console.log(otherItemsNumber);
-console.log(inputTypeRollback);
-console.log(spanRangeValueRollback);
-console.log(inputTotalInput1);
-console.log(inputTotalInput2);
-console.log(inputTotalInput3);
-console.log(inputTotalInput4);
-console.log(inputTotalInput5);
-console.log(screens);
+// console.log(title);
+// console.log(buttons);
+// console.log(buttonPlus);
+// console.log(otherItemsPercent);
+// console.log(otherItemsNumber);
+// console.log(inputTypeRollback);
+// console.log(spanRangeValueRollback);
+// console.log(inputTotalInput1);
+// console.log(inputTotalInput2);
+// console.log(inputTotalInput3);
+// console.log(inputTotalInput4);
+// console.log(inputTotalInput5);
+// console.log(screens);
 
 const appData = {
   rollback: 20,
