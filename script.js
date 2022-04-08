@@ -1,5 +1,37 @@
 "Use strict";
 
+const title = document.getElementsByTagName("h1")[0];
+const buttons = document.getElementsByClassName("handler_btn");
+const buttonPlus = document.querySelector(".screen-btn");
+
+const otherItemsPercent = document.querySelectorAll(".other-items.percent");
+const otherItemsNumber = document.querySelectorAll(".other-items.number");
+
+const inputTypeRollback = document.querySelector(".rollback input");
+const spanRangeValueRollback = document.querySelector(".rollback .range-value");
+
+const inputTotalInput1 = document.getElementsByClassName("total-input")[0];
+const inputTotalInput2 = document.getElementsByClassName("total-input")[1];
+const inputTotalInput3 = document.getElementsByClassName("total-input")[2];
+const inputTotalInput4 = document.getElementsByClassName("total-input")[3];
+const inputTotalInput5 = document.getElementsByClassName("total-input")[4];
+
+let screens = document.querySelectorAll("screen");
+
+console.log(title);
+console.log(buttons);
+console.log(buttonPlus);
+console.log(otherItemsPercent);
+console.log(otherItemsNumber);
+console.log(inputTypeRollback);
+console.log(spanRangeValueRollback);
+console.log(inputTotalInput1);
+console.log(inputTotalInput2);
+console.log(inputTotalInput3);
+console.log(inputTotalInput4);
+console.log(inputTotalInput5);
+console.log(screens);
+
 const appData = {
   rollback: 20,
   title: "",
