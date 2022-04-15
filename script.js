@@ -30,7 +30,10 @@ const appData = {
   allServicePrices: 0,
   fullPrice: 0,
   servicePercentPrice: 0,
-  services: {},
+  //services: {}, // Разделим services на два метода для удобства расчётов
+  servicesPercent: {}, // Сюда записываем значения price в виде процентов
+  servicesNumber: {}, // Сюда запишем фиксированную стоимость
+  // Расчётами займётся другой метод на основании уже известного screenPrice
 
   init: function () {
     appData.addTitle();
@@ -44,6 +47,7 @@ const appData = {
 
   start: function () {
     appData.addScreens();
+    appData.addServices();
     // appData.asking();
     // appData.addPrices();
     // appData.getFullPrice();
@@ -52,7 +56,7 @@ const appData = {
     // appData.logger();
   },
 
-  //Перебираем экраны:
+  //Метод для добавления информации по экранам:
   addScreens: function () {
     screens = document.querySelectorAll(".screen");
     screens.forEach(
@@ -71,7 +75,7 @@ const appData = {
       }
       // На каждой итерации мы будем принимать каждый очередной итерируемый элемент (screen)
     );
-    console.log(appData.screens);
+    //console.log(appData.screens);
   },
 
   // Добавляем клон блока типа экрана
@@ -82,7 +86,41 @@ const appData = {
     //Похоже, после клонирования кол-во индексов не изменяется, потому что клонируются они только после 1-й формы, но не дальше
   },
 
-  // Попробуем рассчитать несколько типов экранов и посмотрим, что попадает в свойства appData.screens
+  // Метод добавления информации по доп.услугам: (А всеми расчётами должен заниматься отдельный метод)
+  addServices: function () {
+    // Здесь необходимо будет перебрать обе коллекции, достать оттуда информацию и записать в объект services
+    otherItemsPercent.forEach(function (item) {
+      //console.log(item);
+      // Нужно юудет достать input чекбокса - проверить, выбран он или не выбран, и добавлять его в services только если он выбран.
+      // Ещё нужны: label и input text, в котором находится кол-во процента
+      const check = item.querySelector("input[type=checkbox]");
+      const label = item.querySelector("label");
+      const input = item.querySelector("input[type=text]");
+
+      // console.log(check);
+      // console.log(label);
+      // console.log(input);
+      if (check.checked) {
+        // у каждого чекбокса есть параметр .checked, в котором находитя либо true либо false в зависимости о того, выбран он или нет
+        appData.servicesPercent[label.textContent] = +input.value; // таким образом, в объект servicesPercent будут попадать только те свойства, которые мы выберем
+      }
+    });
+
+    otherItemsNumber.forEach(function (item) {
+      const check = item.querySelector("input[type=checkbox]");
+      const label = item.querySelector("label");
+      const input = item.querySelector("input[type=text]");
+
+      // console.log(check);
+      // console.log(label);
+      // console.log(input);
+      if (check.checked) {
+        appData.servicesNumber[label.textContent] = +input.value; // объект, в который мы записываем свойства
+      }
+    });
+
+    console.log(appData); // Посмотрим, что попало в расчёты
+  },
 
   asking: function () {
     // Теперь нам этот блок не нужен, потому что мы получаем title из вёрстки
