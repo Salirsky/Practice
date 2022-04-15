@@ -27,7 +27,8 @@ const appData = {
   screens: [],
   screenPrice: 0,
   adaptive: true,
-  allServicePrices: 0,
+  servicePricesPercent: 0, // Переименован из allServicePrices
+  servicePricesNumber: 0, // Переименован из allServicePrices
   fullPrice: 0,
   servicePercentPrice: 0,
   //services: {}, // Разделим services на два метода для удобства расчётов
@@ -48,12 +49,23 @@ const appData = {
   start: function () {
     appData.addScreens();
     appData.addServices();
-    // appData.asking();
-    // appData.addPrices();
-    // appData.getFullPrice();
-    // appData.getTitle();
+
+    appData.addPrices();
+
     // appData.getServicePercentPrice();
     // appData.logger();
+
+    console.log(appData); // Посмотрим, что попало в расчёты
+    appData.showResult();
+  },
+  // Метод, который будет выводить результаты на экран
+  showResult: function () {
+    total.value = appData.screenPrice;
+    // totalCount =
+    totalCountOther.value =
+      appData.servicePricesPercent + appData.servicePricesNumber; // Стоимость дополнительных услуг
+    fullTotalCount.value = appData.fullPrice;
+    // totalCountRollback =
   },
 
   //Метод для добавления информации по экранам:
@@ -118,8 +130,6 @@ const appData = {
         appData.servicesNumber[label.textContent] = +input.value; // объект, в который мы записываем свойства
       }
     });
-
-    console.log(appData); // Посмотрим, что попало в расчёты
   },
 
   // Этот метод будет заниматься высчитыванием стоимости услуг и экранов
@@ -129,23 +139,20 @@ const appData = {
       appData.screenPrice += screen.price;
     }
 
-    for (let key in appData.services) {
-      appData.allServicePrices += appData.services[key];
+    for (let key in appData.servicesNumber) {
+      appData.servicePricesNumber += appData.servicesNumber[key];
     }
-  },
 
-  // Мой способ проверки типа вводимых данных, кажется, тоже больше не нужен
-  // dataTypeCheck: function (data) {
-  //   if (data === null || data === "") {
-  //     return "empty";
-  //   } else if (!Number.isNaN(parseFloat(data)) && isFinite(data)) {
-  //     return "number";
-  //   } else if (!(!Number.isNaN(parseFloat(data)) && isFinite(data))) {
-  //     return "string";
-  //   } else {
-  //     return "weird";
-  //   }
-  // },
+    for (let key in appData.servicesPercent) {
+      appData.servicePricesPercent +=
+        appData.screenPrice * (appData.servicesPercent[key] / 100);
+    }
+
+    appData.fullPrice =
+      appData.screenPrice +
+      appData.servicePricesPercent +
+      appData.servicePricesNumber;
+  },
 
   getRollbackMessage: function (price) {
     switch (true) {
@@ -165,18 +172,6 @@ const appData = {
         return "Вставай, Наташа х)";
     }
   },
-
-  getFullPrice: function () {
-    appData.fullPrice = appData.screenPrice + appData.allServicePrices;
-  },
-
-  getTitle: function () {
-    appData.title = appData.title.trim();
-    appData.title = appData.title.toLowerCase();
-    appData.title =
-      appData.title.charAt(0).toUpperCase() + appData.title.slice(1);
-  },
-
   getServicePercentPrice: function () {
     appData.servicePercentPrice = Math.ceil(
       appData.fullPrice - appData.fullPrice * (appData.rollback / 100)
