@@ -18,7 +18,7 @@ const totalCountOther = document.getElementsByClassName("total-input")[2];
 const fullTotalCount = document.getElementsByClassName("total-input")[3];
 const totalCountRollback = document.getElementsByClassName("total-input")[4];
 
-let screens = document.querySelectorAll("screen");
+let screens = document.querySelectorAll(".screen"); // Здесь содержится псевдомассив данных со страницы
 
 const appData = {
   rollback: 20,
@@ -29,18 +29,44 @@ const appData = {
   allServicePrices: 0,
   fullPrice: 0,
   servicePercentPrice: 0,
-  // servPrice: 0,
   services: {},
+  init: function () {
+    appData.addTitle();
+    startBtn.addEventListener("click", appData.start); // По кнопке start запускается appData.start
+  },
+  addTitle: function () {
+    document.title = title.textContent; // Поменяли название вкладки на title из h1
+  },
 
-  // Убрали все переопределения функций и теперь этот метод нужен только для вызова всех функций в нужном порядке.
   start: function () {
-    appData.asking();
-    appData.addPrices();
-    appData.getFullPrice();
-    appData.getTitle();
-    appData.getServicePercentPrice();
+    appData.addScreens();
+    // appData.asking();
+    // appData.addPrices();
+    // appData.getFullPrice();
+    // appData.getTitle();
+    // appData.getServicePercentPrice();
+    // appData.logger();
+  },
 
-    appData.logger();
+  //Перебираем экраны:
+  addScreens: function () {
+    screens.forEach(
+      function (screen, index) {
+        const select = screen.querySelector("select"); // Получили элементы и теперь можем достать из них значения
+        const input = screen.querySelector("input");
+        //console.dir(select); // сейчас нас интересует свойство selectedIndex - он хранит выбранный варинат. Ещё нас интересует options - html коллекция - достанем из неё textContent
+        //console.log(select.options[select.selectedIndex].textContent);
+        const selectName = select.options[select.selectedIndex].textContent;
+
+        appData.screens.push({
+          id: index,
+          name: selectName,
+          price: +select.value * +input.value,
+        });
+      } // На каждой итерации мы будем принимать каждый очередной итерируемый элемент (screen)
+    );
+
+    console.log(appData.screens);
   },
 
   asking: function () {
@@ -195,4 +221,4 @@ const appData = {
 
 appData.start();
 
-console.log(appData.title);
+appData.init();
