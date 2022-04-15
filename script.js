@@ -65,44 +65,42 @@ const appData = {
         });
       } // На каждой итерации мы будем принимать каждый очередной итерируемый элемент (screen)
     );
-
-    console.log(appData.screens);
   },
 
   asking: function () {
-    do {
-      appData.title = prompt(
-        "Как называется ваш проект?",
-        " КаЛьКулятор Верстки"
-      );
-    } while (
-      appData.dataTypeCheck(appData.title) == "empty" ||
-      appData.dataTypeCheck(appData.title) == "number"
-    );
-    // } while (!appData.isString(appData.title));
+    // Теперь нам этот блок не нужен, потому что мы получаем title из вёрстки
+    // do {
+    //   appData.title = prompt(
+    //     "Как называется ваш проект?",
+    //     " КаЛьКулятор Верстки"
+    //   );
+    // } while (
+    //   appData.dataTypeCheck(appData.title) == "empty" ||
+    //   appData.dataTypeCheck(appData.title) == "number"
+    // );
+
+    // Этот блок нам тоже не нужен, потому что мы всё это также получаем из вёрстки
+    // for (let i = 0; i < 2; i++) {
+    //   let name;
+    //   do {
+    //     name = prompt(
+    //       "Какие типы экранов нужно разработать?",
+    //       "Простые/Сложные/Интерактивные"
+    //     );
+    //   } while (
+    //     appData.dataTypeCheck(name) == "empty" ||
+    //     appData.dataTypeCheck(name) == "number"
+    //   );
+    //   let price = 0;
+    //   do {
+    //     price = prompt("Сколько будет стоить данная работа?", "20000");
+    //   } while (!(appData.dataTypeCheck(price) == "number"));
+
+    // Эту часть мы поместили в функцию addScreens.
+    // appData.screens.push({ id: i, name: name, price: +price });
+    //}
 
     for (let i = 0; i < 2; i++) {
-      let name;
-      do {
-        name = prompt(
-          "Какие типы экранов нужно разработать?",
-          "Простые/Сложные/Интерактивные"
-        );
-      } while (
-        appData.dataTypeCheck(name) == "empty" ||
-        appData.dataTypeCheck(name) == "number"
-      );
-      let price = 0;
-      do {
-        price = prompt("Сколько будет стоить данная работа?", "20000");
-      } while (!(appData.dataTypeCheck(price) == "number"));
-      //} while (!appData.isNumber(appData.screenPrice));
-
-      appData.screens.push({ id: i, name: name, price: +price }); // Внутрь массива сохраняем элемент в виде объекта, у которого будет идентификатор, имя и стоимость
-    }
-
-    for (let i = 0; i < 2; i++) {
-      // Воспользоваться итератором (переменной i), чтобы решить проблему схлопывания name в случае одинакового названия
       let name = [];
       do {
         name = prompt(
@@ -118,13 +116,14 @@ const appData = {
       do {
         price = prompt("Сколько это будет стоить?", "6000");
       } while (!(appData.dataTypeCheck(price) == "number"));
-      //} while (!appData.isNumber(price));
 
-      appData.services[name] = +price; // В виде ключа указываем переменную name, в виде значения - price. Таким образом мы собрали в объект servises все ответы на вопросы пользователю
+      appData.services[name] = +price;
     }
 
-    appData.adaptive = confirm("Нужен ли адаптив на сайте?");
+    // Про адаптив тоже возьмём информацию из вёрстки
+    //appData.adaptive = confirm("Нужен ли адаптив на сайте?");
   },
+
   // Этот метод будет заниматься высчитыванием стоимости услуг и экранов
   addPrices: function () {
     //Реализовать методом reduce
