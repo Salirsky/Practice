@@ -122,64 +122,6 @@ const appData = {
     console.log(appData); // Посмотрим, что попало в расчёты
   },
 
-  asking: function () {
-    // Теперь нам этот блок не нужен, потому что мы получаем title из вёрстки
-    // do {
-    //   appData.title = prompt(
-    //     "Как называется ваш проект?",
-    //     " КаЛьКулятор Верстки"
-    //   );
-    // } while (
-    //   appData.dataTypeCheck(appData.title) == "empty" ||
-    //   appData.dataTypeCheck(appData.title) == "number"
-    // );
-
-    // Этот блок нам тоже не нужен, потому что мы всё это также получаем из вёрстки
-    // for (let i = 0; i < 2; i++) {
-    //   let name;
-    //   do {
-    //     name = prompt(
-    //       "Какие типы экранов нужно разработать?",
-    //       "Простые/Сложные/Интерактивные"
-    //     );
-    //   } while (
-    //     appData.dataTypeCheck(name) == "empty" ||
-    //     appData.dataTypeCheck(name) == "number"
-    //   );
-    //   let price = 0;
-    //   do {
-    //     price = prompt("Сколько будет стоить данная работа?", "20000");
-    //   } while (!(appData.dataTypeCheck(price) == "number"));
-
-    // Эту часть мы поместили в функцию addScreens.
-    // appData.screens.push({ id: i, name: name, price: +price });
-    //}
-
-    // Тоже нужно будет перевести в отдельный метод
-    for (let i = 0; i < 2; i++) {
-      let name = [];
-      do {
-        name = prompt(
-          "Какой дополнительный тип услуги нужен?",
-          "Светлая/тёмная темы"
-        );
-      } while (
-        appData.dataTypeCheck(name) == "empty" ||
-        appData.dataTypeCheck(name) == "number"
-      );
-      let price = 0;
-
-      do {
-        price = prompt("Сколько это будет стоить?", "6000");
-      } while (!(appData.dataTypeCheck(price) == "number"));
-
-      appData.services[name] = +price;
-    }
-
-    // Про адаптив тоже возьмём информацию из вёрстки
-    //appData.adaptive = confirm("Нужен ли адаптив на сайте?");
-  },
-
   // Этот метод будет заниматься высчитыванием стоимости услуг и экранов
   addPrices: function () {
     //Реализовать методом reduce
@@ -193,17 +135,17 @@ const appData = {
   },
 
   // Мой способ проверки типа вводимых данных, кажется, тоже больше не нужен
-  dataTypeCheck: function (data) {
-    if (data === null || data === "") {
-      return "empty";
-    } else if (!Number.isNaN(parseFloat(data)) && isFinite(data)) {
-      return "number";
-    } else if (!(!Number.isNaN(parseFloat(data)) && isFinite(data))) {
-      return "string";
-    } else {
-      return "weird";
-    }
-  },
+  // dataTypeCheck: function (data) {
+  //   if (data === null || data === "") {
+  //     return "empty";
+  //   } else if (!Number.isNaN(parseFloat(data)) && isFinite(data)) {
+  //     return "number";
+  //   } else if (!(!Number.isNaN(parseFloat(data)) && isFinite(data))) {
+  //     return "string";
+  //   } else {
+  //     return "weird";
+  //   }
+  // },
 
   getRollbackMessage: function (price) {
     switch (true) {
