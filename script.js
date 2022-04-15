@@ -18,8 +18,7 @@ const totalCountOther = document.getElementsByClassName("total-input")[2];
 const fullTotalCount = document.getElementsByClassName("total-input")[3];
 const totalCountRollback = document.getElementsByClassName("total-input")[4];
 
-// Данную коллекцию нужно переопределять перед каждым расчётом, чтобы в неё попадали новые элементы
-let screens = document.querySelectorAll(".screen"); // Здесь содержится псевдомассив данных со страницы
+let screens = document.querySelectorAll(".screen");
 
 const appData = {
   rollback: 20,
@@ -27,23 +26,20 @@ const appData = {
   screens: [],
   screenPrice: 0,
   adaptive: true,
-  servicePricesPercent: 0, // Переименован из allServicePrices
-  servicePricesNumber: 0, // Переименован из allServicePrices
+  servicePricesPercent: 0,
+  servicePricesNumber: 0,
   fullPrice: 0,
   servicePercentPrice: 0,
-  //services: {}, // Разделим services на два метода для удобства расчётов
-  servicesPercent: {}, // Сюда записываем значения price в виде процентов
-  servicesNumber: {}, // Сюда запишем фиксированную стоимость
-  // Расчётами займётся другой метод на основании уже известного screenPrice
+  servicesPercent: {},
+  servicesNumber: {},
 
   init: function () {
     appData.addTitle();
-    startBtn.addEventListener("click", appData.start); // По кнопке start запускается appData.start
-    //Делае кнопка "+", создающая клон окошка типа экрана
+    startBtn.addEventListener("click", appData.start);
     buttonPlus.addEventListener("click", appData.addScreenBlock);
   },
   addTitle: function () {
-    document.title = title.textContent; // Поменяли название вкладки на title из h1
+    document.title = title.textContent;
   },
 
   start: function () {
@@ -71,50 +67,36 @@ const appData = {
   //Метод для добавления информации по экранам:
   addScreens: function () {
     screens = document.querySelectorAll(".screen");
-    screens.forEach(
-      function (screen, index) {
-        const select = screen.querySelector("select"); // Получили элементы и теперь можем достать из них значения
-        const input = screen.querySelector("input");
-        //console.dir(select); // сейчас нас интересует свойство selectedIndex - он хранит выбранный варинат. Ещё нас интересует options - html коллекция - достанем из неё textContent
-        //console.log(select.options[select.selectedIndex].textContent);
-        const selectName = select.options[select.selectedIndex].textContent;
+    screens.forEach(function (screen, index) {
+      const select = screen.querySelector("select"); // Получили элементы и теперь можем достать из них значения
+      const input = screen.querySelector("input");
+      const selectName = select.options[select.selectedIndex].textContent;
 
-        appData.screens.push({
-          id: index,
-          name: selectName,
-          price: +select.value * +input.value,
-        });
-      }
-      // На каждой итерации мы будем принимать каждый очередной итерируемый элемент (screen)
-    );
-    //console.log(appData.screens);
+      appData.screens.push({
+        id: index,
+        name: selectName,
+        price: +select.value * +input.value,
+      });
+    });
   },
 
   // Добавляем клон блока типа экрана
   addScreenBlock: function () {
     const cloneScreen = screens[0].cloneNode(true);
-    // Чтобы получить последний элемент в коллекции, нужно обратиться по index length-1 - получим индекс самого последнего элемента
-    screens[screens.length - 1].after(cloneScreen); // Сделали функционал для кнопки "+"
+    screens[screens.length - 1].after(cloneScreen);
     //Похоже, после клонирования кол-во индексов не изменяется, потому что клонируются они только после 1-й формы, но не дальше
   },
 
-  // Метод добавления информации по доп.услугам: (А всеми расчётами должен заниматься отдельный метод)
+  // Метод добавления информации по доп.услугам:
   addServices: function () {
     // Здесь необходимо будет перебрать обе коллекции, достать оттуда информацию и записать в объект services
     otherItemsPercent.forEach(function (item) {
-      //console.log(item);
-      // Нужно юудет достать input чекбокса - проверить, выбран он или не выбран, и добавлять его в services только если он выбран.
-      // Ещё нужны: label и input text, в котором находится кол-во процента
       const check = item.querySelector("input[type=checkbox]");
       const label = item.querySelector("label");
       const input = item.querySelector("input[type=text]");
 
-      // console.log(check);
-      // console.log(label);
-      // console.log(input);
       if (check.checked) {
-        // у каждого чекбокса есть параметр .checked, в котором находитя либо true либо false в зависимости о того, выбран он или нет
-        appData.servicesPercent[label.textContent] = +input.value; // таким образом, в объект servicesPercent будут попадать только те свойства, которые мы выберем
+        appData.servicesPercent[label.textContent] = +input.value;
       }
     });
 
@@ -123,9 +105,6 @@ const appData = {
       const label = item.querySelector("label");
       const input = item.querySelector("input[type=text]");
 
-      // console.log(check);
-      // console.log(label);
-      // console.log(input);
       if (check.checked) {
         appData.servicesNumber[label.textContent] = +input.value; // объект, в который мы записываем свойства
       }
