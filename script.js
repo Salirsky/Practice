@@ -18,12 +18,16 @@ const totalCountOther = document.getElementsByClassName("total-input")[2];
 const fullTotalCount = document.getElementsByClassName("total-input")[3];
 const totalCountRollback = document.getElementsByClassName("total-input")[4];
 
+let screensSelect = document.querySelectorAll(".main-controls__select option");
 let screens = document.querySelectorAll(".screen");
 
+//console.log(screensSelect);
+
 const appData = {
-  rollback: 20,
+  rollback: 0,
   title: "",
   screens: [],
+  screensCount: 0,
   screenPrice: 0,
   adaptive: true,
   servicePricesPercent: 0,
@@ -45,7 +49,6 @@ const appData = {
   start: function () {
     appData.addScreens();
     appData.addServices();
-
     appData.addPrices();
 
     // appData.getServicePercentPrice();
@@ -53,15 +56,17 @@ const appData = {
 
     console.log(appData); // Посмотрим, что попало в расчёты
     appData.showResult();
+    appData.addRollback();
+    appData.countBan();
   },
   // Метод, который будет выводить результаты на экран
   showResult: function () {
-    total.value = appData.screenPrice;
-    // totalCount =
+    total.value = appData.screenPrice; // Стоимость вёрстки
+    totalCount.value = appData.screensCount; // Количество экранов для вёрстки
     totalCountOther.value =
       appData.servicePricesPercent + appData.servicePricesNumber; // Стоимость дополнительных услуг
-    fullTotalCount.value = appData.fullPrice;
-    // totalCountRollback =
+    fullTotalCount.value = appData.fullPrice; // Полная стоимость
+    totalCountRollback.value = appData.servicePercentPrice; // Полная стоимость с учётом отката
   },
 
   //Метод для добавления информации по экранам:
@@ -77,14 +82,17 @@ const appData = {
         name: selectName,
         price: +select.value * +input.value,
       });
+
+      appData.screensCount += +input.value;
     });
+
+    console.dir(appData.screens);
   },
 
   // Добавляем клон блока типа экрана
   addScreenBlock: function () {
     const cloneScreen = screens[0].cloneNode(true);
     screens[screens.length - 1].after(cloneScreen);
-    //Похоже, после клонирования кол-во индексов не изменяется, потому что клонируются они только после 1-й формы, но не дальше
   },
 
   // Метод добавления информации по доп.услугам:
@@ -111,6 +119,14 @@ const appData = {
     });
   },
 
+  addRollback: function () {
+    const rangeLogger = function (event) {
+      inputRangeValue.textContent = event.target.value + "%";
+      appData.rollback = event.target.value; // Записываем в свойство rollback значение, полученное в range
+    };
+    inputRange.addEventListener("input", rangeLogger);
+  },
+
   // Этот метод будет заниматься высчитыванием стоимости услуг и экранов
   addPrices: function () {
     //Реализовать методом reduce
@@ -131,36 +147,32 @@ const appData = {
       appData.screenPrice +
       appData.servicePricesPercent +
       appData.servicePricesNumber;
-  },
 
-  getRollbackMessage: function (price) {
-    switch (true) {
-      case 30000 <= price:
-        return "Даем скидку в 10%";
-
-      case 15000 <= price && price < 30000:
-        return "Даем скидку в 5%";
-
-      case price < 15000 && price == 0:
-        return "Скидка не предусмотрена";
-
-      case price < 0:
-        return "Что-то пошло не так";
-
-      default:
-        return "Вставай, Наташа х)";
-    }
-  },
-  getServicePercentPrice: function () {
     appData.servicePercentPrice = Math.ceil(
       appData.fullPrice - appData.fullPrice * (appData.rollback / 100)
     );
   },
 
-  logger: function () {
-    console.log(appData.fullPrice);
-    console.log(appData.servicePercentPrice);
+  // logger: function () {
+  //   console.log(appData.fullPrice);
+  //   console.log(appData.servicePercentPrice);
+  //   console.log(appData.screens);
+  // },
+
+  countBan: function () {
+    //console.dir(appData.screens);
     console.log(appData.screens);
+    if (
+      appData.screensCount === 0 ||
+      appData.screens[0].name == "Тип экранов"
+    ) {
+      startBtn.addEventListener("click", function (event) {
+        event.preventDefault(); // запретили работу кнопки
+        console.log("Я не буду считать твоё ничего!");
+      });
+    } else {
+      console.log("Всё в порядке!");
+    }
   },
 }; // AppData
 
