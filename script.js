@@ -18,6 +18,7 @@ const totalCountOther = document.getElementsByClassName("total-input")[2];
 const fullTotalCount = document.getElementsByClassName("total-input")[3];
 const totalCountRollback = document.getElementsByClassName("total-input")[4];
 
+// Данную коллекцию нужно переопределять перед каждым расчётом, чтобы в неё попадали новые элементы
 let screens = document.querySelectorAll(".screen"); // Здесь содержится псевдомассив данных со страницы
 
 const appData = {
@@ -30,9 +31,12 @@ const appData = {
   fullPrice: 0,
   servicePercentPrice: 0,
   services: {},
+
   init: function () {
     appData.addTitle();
     startBtn.addEventListener("click", appData.start); // По кнопке start запускается appData.start
+    //Делае кнопка "+", создающая клон окошка типа экрана
+    buttonPlus.addEventListener("click", appData.addScreenBlock);
   },
   addTitle: function () {
     document.title = title.textContent; // Поменяли название вкладки на title из h1
@@ -50,6 +54,7 @@ const appData = {
 
   //Перебираем экраны:
   addScreens: function () {
+    screens = document.querySelectorAll(".screen");
     screens.forEach(
       function (screen, index) {
         const select = screen.querySelector("select"); // Получили элементы и теперь можем достать из них значения
@@ -63,9 +68,21 @@ const appData = {
           name: selectName,
           price: +select.value * +input.value,
         });
-      } // На каждой итерации мы будем принимать каждый очередной итерируемый элемент (screen)
+      }
+      // На каждой итерации мы будем принимать каждый очередной итерируемый элемент (screen)
     );
+    console.log(appData.screens);
   },
+
+  // Добавляем клон блока типа экрана
+  addScreenBlock: function () {
+    const cloneScreen = screens[0].cloneNode(true);
+    // Чтобы получить последний элемент в коллекции, нужно обратиться по index length-1 - получим индекс самого последнего элемента
+    screens[screens.length - 1].after(cloneScreen); // Сделали функционал для кнопки "+"
+    //Похоже, после клонирования кол-во индексов не изменяется, потому что клонируются они только после 1-й формы, но не дальше
+  },
+
+  // Попробуем рассчитать несколько типов экранов и посмотрим, что попадает в свойства appData.screens
 
   asking: function () {
     // Теперь нам этот блок не нужен, потому что мы получаем title из вёрстки
@@ -100,6 +117,7 @@ const appData = {
     // appData.screens.push({ id: i, name: name, price: +price });
     //}
 
+    // Тоже нужно будет перевести в отдельный метод
     for (let i = 0; i < 2; i++) {
       let name = [];
       do {
@@ -136,19 +154,7 @@ const appData = {
     }
   },
 
-  // isNumber: function (num) {
-  //   return !isNaN(parseFloat(num)) && isFinite(num);
-  // },
-
-  // isString: function (str) {
-  //   if (typeof str == "string") {
-  //     return true;
-  //   } else if (!(!Number.isNaN(parseFloat(str)) && isFinite(str))) {
-  //     return false;
-  //   }
-
-  // },
-
+  // Мой способ проверки типа вводимых данных, кажется, тоже больше не нужен
   dataTypeCheck: function (data) {
     if (data === null || data === "") {
       return "empty";
@@ -160,16 +166,6 @@ const appData = {
       return "weird";
     }
   },
-
-  // Должен считать сумму всех доп. услуг. Функции стоит делать что-то одно, либо считать, либо задавать вопросы. Надо её отрефакторить.
-  // Название и цену стоит записывать в объект в виде пар ключ:значение
-  // Тогда мы сможем вопросы перенести в asking, а в функции оставить расчёты - это будет вернее с точки зрения логики
-  //getAllServicePrices: function () {
-  // Т.к на момент запуска данного метода у нас уже будет существовать объект с ответами на вопросы,
-  // Нам остаётся перебрать этот объект циклом for---in и просто суммировать стоимость
-
-  // Таким образом, в св-ва allServicePrices попадёт сумма всех значений из appData.services
-  //},
 
   getRollbackMessage: function (price) {
     switch (true) {
@@ -211,10 +207,6 @@ const appData = {
     console.log(appData.fullPrice);
     console.log(appData.servicePercentPrice);
     console.log(appData.screens);
-
-    // for (let key in appData) {
-    //   console.log(key);
-    // }
   },
 }; // AppData
 
