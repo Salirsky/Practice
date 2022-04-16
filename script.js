@@ -18,15 +18,13 @@ const totalCountOther = document.getElementsByClassName("total-input")[2];
 const fullTotalCount = document.getElementsByClassName("total-input")[3];
 const totalCountRollback = document.getElementsByClassName("total-input")[4];
 
-let screensSelect = document.querySelectorAll(".main-controls__select option");
 let screens = document.querySelectorAll(".screen");
-
-//console.log(screensSelect);
+//let screens2 = document.getElementsByName("views-select"); // Нужно прописать своё name для экранов
 
 const appData = {
   rollback: 0,
   title: "",
-  screens: [],
+  screens: [], // Экраны - сюда мы будем записывать значения, как только они будут выбраны пользователем
   screensCount: 0,
   screenPrice: 0,
   adaptive: true,
@@ -54,7 +52,7 @@ const appData = {
     // appData.getServicePercentPrice();
     // appData.logger();
 
-    console.log(appData); // Посмотрим, что попало в расчёты
+    //console.log(appData); // Посмотрим, что попало в расчёты
     appData.showResult();
     appData.addRollback();
     appData.countBan();
@@ -71,13 +69,22 @@ const appData = {
 
   //Метод для добавления информации по экранам:
   addScreens: function () {
+    appData.screens = []; // Обнуляем информацию по экранам
     screens = document.querySelectorAll(".screen");
     screens.forEach(function (screen, index) {
       const select = screen.querySelector("select"); // Получили элементы и теперь можем достать из них значения
       const input = screen.querySelector("input");
       const selectName = select.options[select.selectedIndex].textContent;
 
+      //console.dir(select);
+      // Нас интересует selectedIndex - оно хранит индекс того option, который мы выбрали
+      //console.dir(select.options[select.selectedIndex]);
+      // Обратимся к options и по индексу достанем тот options, который выбран
+      //console.dir(select.options[select.selectedIndex].textContent);
+      // А затем обратимся к свойству .textContent
+
       appData.screens.push({
+        // Отправляем в массив appData.screens информацию о выбранном экране
         id: index,
         name: selectName,
         price: +select.value * +input.value,
@@ -86,13 +93,15 @@ const appData = {
       appData.screensCount += +input.value;
     });
 
-    console.dir(appData.screens);
+    console.log(appData.screens);
   },
 
   // Добавляем клон блока типа экрана
   addScreenBlock: function () {
+    screens = document.querySelectorAll(".screen"); // Обновляем screens каждый раз - сейчас вручную, но если ввести в js screens через динамический document.getElementsByName, то он сам будет обновляться
     const cloneScreen = screens[0].cloneNode(true);
     screens[screens.length - 1].after(cloneScreen);
+    screens = document.querySelectorAll(".screen");
   },
 
   // Метод добавления информации по доп.услугам:
@@ -160,15 +169,13 @@ const appData = {
   // },
 
   countBan: function () {
+    // Нужно поставить обновление страницы после действия кнопки "рассчитать"
     //console.dir(appData.screens);
-    console.log(appData.screens);
-    if (
-      appData.screensCount === 0 ||
-      appData.screens[0].name == "Тип экранов"
-    ) {
+    //console.log(appData.screens);
+    if (appData.screensCount === 0) {
       startBtn.addEventListener("click", function (event) {
         event.preventDefault(); // запретили работу кнопки
-        console.log("Я не буду считать твоё ничего!");
+        console.log('Работа кнопки "рассчитать" запрещена ');
       });
     } else {
       console.log("Всё в порядке!");
@@ -179,3 +186,16 @@ const appData = {
 appData.start();
 
 appData.init();
+
+// || appData.screens[0].name == "Тип экранов"
+
+// select.options[select.selectedIndex].textContent == "Тип экранов"
+// Мы не можем так сделать, потому что переменной select нет в глобальной области видимости
+
+// Три +1  проблемы:
+// 1) Форма с типом экрана добавляется после первой формы, а не после последней
+// 2) Даже если мы добавлили новые формы и изменили в них информацию, всё равно вариант "тип экранов" где-то внутри остаётся и тоже считается
+
+// 3) Нужно поставить обновление страницы после кнопки "рассчитать" - а то новые данные суммируются с предыдущими и получается лажа
+
+// 4) Сделать запрет на действие кнопки "рассчитать", если выбран вариант "Тип экрана" или не вписано кол-во экранов.
