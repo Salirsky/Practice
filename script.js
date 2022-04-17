@@ -37,8 +37,8 @@ const appData = {
 
   init: function () {
     appData.addTitle();
-    startBtn.addEventListener("click", appData.start);
     buttonPlus.addEventListener("click", appData.addScreenBlock);
+    startBtn.addEventListener("click", appData.start); // appData.testCount(event) - передаём в testCount событие - клик по кнопке. - не работает
   },
   addTitle: function () {
     document.title = title.textContent;
@@ -55,7 +55,7 @@ const appData = {
     //console.log(appData); // Посмотрим, что попало в расчёты
     appData.showResult();
     appData.addRollback();
-    appData.countBan();
+    appData.testCount();
   },
   // Метод, который будет выводить результаты на экран
   showResult: function () {
@@ -93,7 +93,7 @@ const appData = {
       appData.screensCount += +input.value;
     });
 
-    console.log(appData.screens);
+    //console.log(appData.screens);
   },
 
   // Добавляем клон блока типа экрана
@@ -162,24 +162,27 @@ const appData = {
     );
   },
 
-  // logger: function () {
-  //   console.log(appData.fullPrice);
-  //   console.log(appData.servicePercentPrice);
-  //   console.log(appData.screens);
-  // },
+  logger: function () {
+    console.log(appData.fullPrice);
+    console.log(appData.servicePercentPrice);
+    console.log(appData.screens);
+  },
 
-  countBan: function () {
-    // Нужно поставить обновление страницы после действия кнопки "рассчитать"
-    //console.dir(appData.screens);
-    //console.log(appData.screens);
-    if (appData.screensCount === 0) {
-      startBtn.addEventListener("click", function (event) {
-        event.preventDefault(); // запретили работу кнопки
-        console.log('Работа кнопки "рассчитать" запрещена ');
-      });
-    } else {
-      console.log("Всё в порядке!");
-    }
+  testCount: function () {
+    appData.screens = []; // Обнуляем информацию по экранам
+    screens = document.querySelectorAll(".screen");
+    screens.forEach(function (screen) {
+      // Перебираем экраны, учитываем, что их может быть несколько
+      const select = screen.querySelector("select");
+      const input = screen.querySelector("input");
+
+      if (select.selectedIndex == 0 || input.value == 0) {
+        startBtn.addEventListener("click", function (event) {
+          event.preventDefault(); // запретили работу кнопки
+          console.log("Введите количество экранов");
+        });
+      }
+    });
   },
 }; // AppData
 
@@ -187,15 +190,6 @@ appData.start();
 
 appData.init();
 
-// || appData.screens[0].name == "Тип экранов"
+// Нужно обнулять данные каждый раз перед нажатием кнопки "рассчитать"
 
-// select.options[select.selectedIndex].textContent == "Тип экранов"
-// Мы не можем так сделать, потому что переменной select нет в глобальной области видимости
-
-// Три +1  проблемы:
-// 1) Форма с типом экрана добавляется после первой формы, а не после последней
-// 2) Даже если мы добавлили новые формы и изменили в них информацию, всё равно вариант "тип экранов" где-то внутри остаётся и тоже считается
-
-// 3) Нужно поставить обновление страницы после кнопки "рассчитать" - а то новые данные суммируются с предыдущими и получается лажа
-
-// 4) Сделать запрет на действие кнопки "рассчитать", если выбран вариант "Тип экрана" или не вписано кол-во экранов.
+// Сделать проверку экранов
