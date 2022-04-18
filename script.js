@@ -156,7 +156,6 @@ const appData = {
     const rangeLogger = function (event) {
       inputRangeValue.textContent = event.target.value + "%"; // Записываем процент под формой range
       appData.rollback = event.target.value; // Записываем в свойство rollback значение, полученное в range
-      appData.rangeDynamic();
     };
     inputRange.addEventListener("input", rangeLogger);
   },
@@ -227,15 +226,6 @@ const appData = {
   },
 
   // Сделать так, чтоб после нажатия на кнопку Рассчитать изменение значения input[type=range] меняло и сумму в поле с подписью "Стоимость с учетом отката". Сумма должна пересчитываться с учетом реального значения процента отката. Проверить чтоб значение не менялось до расчета, только после рассчета.
-  rangeDynamic: function () {
-    // Если значения посчитаны, то:
-    if (appData.fullPrice !== 0) {
-      appData.servicePercentPrice = Math.ceil(
-        appData.fullPrice - appData.fullPrice * (appData.rollback / 100)
-      );
-      totalCountRollback.value = appData.servicePercentPrice; // Обновляем значение totalCountRollback.value для функции showResult
-    }
-  },
 }; // AppData
 
 //appData.start();
