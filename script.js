@@ -19,12 +19,11 @@ const fullTotalCount = document.getElementsByClassName("total-input")[3];
 const totalCountRollback = document.getElementsByClassName("total-input")[4];
 
 let screens = document.querySelectorAll(".screen");
-//let screens2 = document.getElementsByName("views-select"); // Нужно прописать своё name для экранов
 
 const appData = {
   rollback: 0,
   title: "",
-  screens: [], // Экраны - сюда мы будем записывать значения, как только они будут выбраны пользователем
+  screens: [],
   screensCount: 0,
   screenPrice: 0,
   adaptive: true,
@@ -38,13 +37,10 @@ const appData = {
   init: function () {
     appData.addTitle();
     buttonPlus.addEventListener("click", appData.addScreenBlock);
-
-    //startBtn.addEventListener("click", appData.start); // appData.testCount(event) - передаём в testCount событие - клик по кнопке. - не работает
-    //startBtn.addEventListener("click", appData.testCount);
-    //appData.addRollback();
     //Вызываем функцию appData.conditionCheck для проверки обеих форм выбора типа экрана - select и input
     screens[0].addEventListener("change", appData.conditionCheck);
     screens[0].addEventListener("input", appData.conditionCheck);
+    inputRange.addEventListener("input", appData.addRollback);
     // Изначально кнопка отключена
     appData.disableButtonCount();
   },
@@ -54,19 +50,9 @@ const appData = {
 
   start: function () {
     appData.addScreens();
-    //console.log(appData.screens);
     appData.addServices();
-    //console.log(appData.servicesPercent);
-    //console.log(appData.servicesNumber);
     appData.addPrices();
-
-    // appData.getServicePercentPrice();
-    // appData.logger();
-
-    //console.log(appData); // Посмотрим, что попало в расчёты
     appData.showResult();
-    appData.addRollback();
-    //appData.rangeDynamic();
   },
   // Метод, который будет выводить результаты на экран
   showResult: function () {
@@ -104,8 +90,6 @@ const appData = {
 
       appData.screensCount += +input.value;
     });
-
-    //console.log(appData.screens);
   },
 
   // Добавляем клон блока типа экрана
@@ -127,7 +111,6 @@ const appData = {
 
   // Метод добавления информации по доп.услугам:
   addServices: function () {
-    //appData.servicesNumber = {};
     // Здесь необходимо будет перебрать обе коллекции, достать оттуда информацию и записать в объект services
     appData.servicesPercent = [];
     otherItemsPercent.forEach(function (item) {
@@ -152,12 +135,9 @@ const appData = {
     });
   },
 
-  addRollback: function () {
-    const rangeLogger = function (event) {
-      inputRangeValue.textContent = event.target.value + "%"; // Записываем процент под формой range
-      appData.rollback = event.target.value; // Записываем в свойство rollback значение, полученное в range
-    };
-    inputRange.addEventListener("input", rangeLogger);
+  addRollback: function (event) {
+    inputRangeValue.textContent = event.target.value + "%"; // Записываем процент под формой range
+    appData.rollback = event.target.value; // Записываем в свойство rollback значение, полученное в range
   },
 
   // Этот метод будет заниматься высчитыванием стоимости услуг и экранов
@@ -211,11 +191,9 @@ const appData = {
 
   // Функция проверки условия заполненности формы информации по экранам
   conditionCheck: function () {
-    // forEachh здесь не подходит, потому что return в её случае работает не так, как нам в данном случае нужно
     for (i = 0; i < screens.length; i++) {
       const index = screens[i].querySelector("select").selectedIndex;
       const input = +screens[i].querySelector("input").value;
-      //console.log(input);
       if (index !== 0 && input > 0) {
         appData.enableButtonCount();
       } else {
@@ -224,10 +202,6 @@ const appData = {
       }
     }
   },
-
-  // Сделать так, чтоб после нажатия на кнопку Рассчитать изменение значения input[type=range] меняло и сумму в поле с подписью "Стоимость с учетом отката". Сумма должна пересчитываться с учетом реального значения процента отката. Проверить чтоб значение не менялось до расчета, только после рассчета.
 }; // AppData
-
-//appData.start();
 
 appData.init();
