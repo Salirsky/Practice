@@ -20,6 +20,13 @@ const totalCountRollback = document.getElementsByClassName("total-input")[4];
 
 let screens = document.querySelectorAll(".screen");
 
+const start = () => {
+  appData.addScreens();
+  appData.addServices();
+  appData.addPrices();
+  appData.showResult();
+};
+
 const appData = {
   rollback: 0,
   title: "",
@@ -35,25 +42,19 @@ const appData = {
   servicesNumber: {},
 
   init: function () {
-    appData.addTitle();
+    this.addTitle();
     buttonPlus.addEventListener("click", appData.addScreenBlock);
     //Вызываем функцию appData.conditionCheck для проверки обеих форм выбора типа экрана - select и input
     screens[0].addEventListener("change", appData.conditionCheck);
     screens[0].addEventListener("input", appData.conditionCheck);
     inputRange.addEventListener("input", appData.addRollback);
     // Изначально кнопка отключена
-    appData.disableButtonCount();
+    this.disableButtonCount();
   },
   addTitle: function () {
     document.title = title.textContent;
   },
 
-  start: function () {
-    appData.addScreens();
-    appData.addServices();
-    appData.addPrices();
-    appData.showResult();
-  },
   // Метод, который будет выводить результаты на экран
   showResult: function () {
     total.value = appData.screenPrice; // Стоимость вёрстки
@@ -181,13 +182,13 @@ const appData = {
   // Отключаем работу кнопки
   disableButtonCount: function () {
     startBtn.style.backgroundColor = "#777777";
-    startBtn.removeEventListener("click", appData.start);
+    startBtn.removeEventListener("click", start);
   },
 
   // Включаем работу кнопки
   enableButtonCount: function () {
     startBtn.style.backgroundColor = "#A52A2A";
-    startBtn.addEventListener("click", appData.start);
+    startBtn.addEventListener("click", start);
   },
 
   // Функция проверки условия заполненности формы информации по экранам
@@ -217,3 +218,18 @@ const appData = {
 }; // AppData
 
 appData.init();
+
+// 1) Перевести все функции, которые возможно, в вызов через This
+
+// 2) То, что можно, перевести в стрелочные функции
+
+// 3) Блокировать (свойство disabled) все input[type=text] и select с левой стороны после нажатия кнопки Рассчитать, после этого кнопка Рассчитать пропадает и появляется кнопка Сброс (id=reset)
+
+// 4) В объекте реализовать метод reset(), срабатывающий по нажатию на кнопку Сброс. Метод reset() должен привести объект к исходному состоянию:
+
+// Кнопка Сброс должна замениться на кнопку Рассчитать
+// Должны быть убраны все дополнительные элементы (которые добавлялись динамически) и значения полей ввода
+// Все input[type=text] и select должны быть разблокированы
+
+// Метод reset должен всю программу возвращать в исходное состояние
+// Метод reset() пишем самостоятельно, никаких перезагрузок страницы. Метод должен быть расписан наподобие start().
