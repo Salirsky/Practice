@@ -21,10 +21,105 @@ const totalCountRollback = document.getElementsByClassName("total-input")[4];
 let screens = document.querySelectorAll(".screen");
 
 const start = () => {
-  appData.addScreens();
-  appData.addServices();
-  appData.addPrices();
-  appData.showResult();
+  addScreens();
+  addServices();
+  addPrices();
+  showResult();
+};
+
+//Метод для добавления информации по экранам:
+const addScreens = () => {
+  appData.screens = []; // Обнуляем информацию по экранам
+  appData.screensCount = 0;
+  screens = document.querySelectorAll(".screen");
+  screens.forEach(function (screen, index) {
+    const select = screen.querySelector("select"); // Получили элементы и теперь можем достать из них значения
+    const input = screen.querySelector("input");
+    const selectName = select.options[select.selectedIndex].textContent;
+
+    //console.dir(select);
+    // Нас интересует selectedIndex - оно хранит индекс того option, который мы выбрали
+    //console.dir(select.options[select.selectedIndex]);
+    // Обратимся к options и по индексу достанем тот options, который выбран
+    //console.dir(select.options[select.selectedIndex].textContent);
+    // А затем обратимся к свойству .textContent
+
+    appData.screens.push({
+      // Отправляем в массив appData.screens информацию о выбранном экране
+      id: index,
+      name: selectName,
+      price: +select.value * +input.value,
+    });
+
+    appData.screensCount += +input.value;
+  });
+};
+
+// Метод добавления информации по доп.услугам:
+const addServices = () => {
+  // Здесь необходимо будет перебрать обе коллекции, достать оттуда информацию и записать в объект services
+  appData.servicesPercent = [];
+  otherItemsPercent.forEach(function (item) {
+    const check = item.querySelector("input[type=checkbox]");
+    const label = item.querySelector("label");
+    const input = item.querySelector("input[type=text]");
+
+    if (check.checked) {
+      appData.servicesPercent[label.textContent] = +input.value;
+    }
+  });
+
+  appData.servicesNumber = [];
+  otherItemsNumber.forEach(function (item) {
+    const check = item.querySelector("input[type=checkbox]");
+    const label = item.querySelector("label");
+    const input = item.querySelector("input[type=text]");
+
+    if (check.checked) {
+      appData.servicesNumber[label.textContent] = +input.value; // объект, в который мы записываем свойства
+    }
+  });
+};
+
+// Этот метод будет заниматься высчитыванием стоимости услуг и экранов
+const addPrices = () => {
+  appData.screenPrice = 0;
+  appData.servicePricesNumber = 0;
+  appData.servicePricesPercent = 0;
+  appData.fullPrice = 0;
+  appData.servicePercentPrice = 0;
+
+  for (let screen of appData.screens) {
+    appData.screenPrice += screen.price;
+  }
+
+  for (let key in appData.servicesNumber) {
+    appData.servicePricesNumber += appData.servicesNumber[key];
+  }
+
+  for (let key in appData.servicesPercent) {
+    appData.servicePricesPercent +=
+      appData.screenPrice * (appData.servicesPercent[key] / 100);
+  }
+
+  appData.fullPrice =
+    appData.screenPrice +
+    appData.servicePricesPercent +
+    appData.servicePricesNumber;
+
+  appData.servicePercentPrice = Math.ceil(
+    appData.fullPrice - appData.fullPrice * (appData.rollback / 100)
+  );
+};
+
+// Метод, который будет выводить результаты на экран
+const showResult = () => {
+  total.value = appData.screenPrice; // Стоимость вёрстки
+  totalCount.value = appData.screensCount; // Количество экранов для вёрстки
+  totalCountOther.value =
+    appData.servicePricesPercent + appData.servicePricesNumber; // Стоимость дополнительных услуг
+  fullTotalCount.value = appData.fullPrice; // Полная стоимость
+  totalCountRollback.value = appData.servicePercentPrice; // Полная стоимость с учётом отката
 };
 
 const appData = {
@@ -51,46 +146,9 @@ const appData = {
     // Изначально кнопка отключена
     this.disableButtonCount();
   },
+
   addTitle: function () {
     document.title = title.textContent;
-  },
-
-  // Метод, который будет выводить результаты на экран
-  showResult: function () {
-    total.value = appData.screenPrice; // Стоимость вёрстки
-    totalCount.value = appData.screensCount; // Количество экранов для вёрстки
-    totalCountOther.value =
-      appData.servicePricesPercent + appData.servicePricesNumber; // Стоимость дополнительных услуг
-    fullTotalCount.value = appData.fullPrice; // Полная стоимость
-    totalCountRollback.value = appData.servicePercentPrice; // Полная стоимость с учётом отката
-  },
-
-  //Метод для добавления информации по экранам:
-  addScreens: function () {
-    appData.screens = []; // Обнуляем информацию по экранам
-    appData.screensCount = 0;
-    screens = document.querySelectorAll(".screen");
-    screens.forEach(function (screen, index) {
-      const select = screen.querySelector("select"); // Получили элементы и теперь можем достать из них значения
-      const input = screen.querySelector("input");
-      const selectName = select.options[select.selectedIndex].textContent;
-
-      //console.dir(select);
-      // Нас интересует selectedIndex - оно хранит индекс того option, который мы выбрали
-      //console.dir(select.options[select.selectedIndex]);
-      // Обратимся к options и по индексу достанем тот options, который выбран
-      //console.dir(select.options[select.selectedIndex].textContent);
-      // А затем обратимся к свойству .textContent
-
-      appData.screens.push({
-        // Отправляем в массив appData.screens информацию о выбранном экране
-        id: index,
-        name: selectName,
-        price: +select.value * +input.value,
-      });
-
-      appData.screensCount += +input.value;
-    });
   },
 
   // Добавляем клон блока типа экрана
@@ -110,67 +168,10 @@ const appData = {
     appData.conditionCheck();
   },
 
-  // Метод добавления информации по доп.услугам:
-  addServices: function () {
-    // Здесь необходимо будет перебрать обе коллекции, достать оттуда информацию и записать в объект services
-    appData.servicesPercent = [];
-    otherItemsPercent.forEach(function (item) {
-      const check = item.querySelector("input[type=checkbox]");
-      const label = item.querySelector("label");
-      const input = item.querySelector("input[type=text]");
-
-      if (check.checked) {
-        appData.servicesPercent[label.textContent] = +input.value;
-      }
-    });
-
-    appData.servicesNumber = [];
-    otherItemsNumber.forEach(function (item) {
-      const check = item.querySelector("input[type=checkbox]");
-      const label = item.querySelector("label");
-      const input = item.querySelector("input[type=text]");
-
-      if (check.checked) {
-        appData.servicesNumber[label.textContent] = +input.value; // объект, в который мы записываем свойства
-      }
-    });
-  },
-
   addRollback: function (event) {
     inputRangeValue.textContent = event.target.value + "%"; // Записываем процент под формой range
     appData.rollback = event.target.value; // Записываем в свойство rollback значение, полученное в range
     appData.rangeDynamic();
-  },
-
-  // Этот метод будет заниматься высчитыванием стоимости услуг и экранов
-  addPrices: function () {
-    appData.screenPrice = 0;
-    appData.servicePricesNumber = 0;
-    appData.servicePricesPercent = 0;
-    appData.fullPrice = 0;
-    appData.servicePercentPrice = 0;
-
-    for (let screen of appData.screens) {
-      appData.screenPrice += screen.price;
-    }
-
-    for (let key in appData.servicesNumber) {
-      appData.servicePricesNumber += appData.servicesNumber[key];
-    }
-
-    for (let key in appData.servicesPercent) {
-      appData.servicePricesPercent +=
-        appData.screenPrice * (appData.servicesPercent[key] / 100);
-    }
-
-    appData.fullPrice =
-      appData.screenPrice +
-      appData.servicePricesPercent +
-      appData.servicePricesNumber;
-
-    appData.servicePercentPrice = Math.ceil(
-      appData.fullPrice - appData.fullPrice * (appData.rollback / 100)
-    );
   },
 
   // logger: function () {
