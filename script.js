@@ -15,6 +15,7 @@ const resetBtn = document.getElementById("reset");
 const mainControlsSelect = document.querySelectorAll(".main-controls__select");
 const customCheckboxes = document.querySelectorAll(".custom-checkbox");
 const viewsSelect = document.getElementsByName("views-select");
+const viewsInput = document.querySelectorAll(".main-controls__select input");
 
 const total = document.getElementsByClassName("total-input")[0];
 const totalCount = document.getElementsByClassName("total-input")[1];
@@ -40,9 +41,15 @@ const inputDisabled = () => {
   for (const viewSelect of viewsSelect) {
     viewSelect.setAttribute("disabled", "");
   }
+  for (const viewInput of viewsInput) {
+    viewInput.setAttribute("disabled", "");
+  }
   for (const customCheckbox of customCheckboxes) {
     customCheckbox.setAttribute("disabled", "");
   }
+
+  console.log(viewsInput);
+  console.log(viewsSelect);
 };
 
 //Метод для добавления информации по экранам:
@@ -175,6 +182,7 @@ const appData = {
     }
     for (const customCheckbox of customCheckboxes) {
       customCheckbox.checked = false;
+      customCheckbox.removeAttribute("disabled");
     }
 
     total.value = 0;
@@ -182,14 +190,13 @@ const appData = {
     totalCountOther.value = 0;
     fullTotalCount.value = 0;
     totalCountRollback.value = 0;
-    appData.screens = 0;
 
-    console.log(appData.rollback);
+    //console.log(appData.rollback);
 
     //appData.rollback = 0;
     //appData.rollback.input.value = "";
 
-    console.log(inputRange);
+    //console.log(inputRange);
 
     inputRangeValue.textContent = 0;
     appData.rollback = 0;
@@ -206,6 +213,13 @@ const appData = {
     // this.rollback.input.value = 0;
 
     // inputRange.setAttribute('value="0"');
+
+    for (i = 0; i < screens.length; i++) {
+      screens[i].querySelector("select").selectedIndex = 0;
+      screens[i].querySelector("input").value = "";
+    }
+
+    // appData.screens = [];
   },
 
   addTitle: function () {
@@ -271,12 +285,6 @@ const appData = {
       }
     }
   },
-
-  // Сделать так, чтобы после нажатия на кнопку Рассчитать изменение значения input[type=range] меняло и сумму в поле с подписью "Стоимость с учетом отката". Сумма должна пересчитываться с учетом реального значения процента отката. Проверить чтоб значение не менялось до расчета, только после рассчета.
-  // rangeDynamic: function () {
-  //   // Если значения посчитаны, то:
-
-  // },
 }; // AppData
 
 appData.init();
