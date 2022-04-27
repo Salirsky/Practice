@@ -9,8 +9,19 @@ const otherItemsNumber = document.querySelectorAll(".other-items.number");
 const inputRange = document.querySelector(".rollback input");
 const inputRangeValue = document.querySelector(".rollback .range-value");
 
-const startBtn = document.getElementsByClassName("handler_btn")[0];
-const resetBtn = document.getElementsByClassName("handler_btn")[1];
+// const startBtn = document.getElementsByClassName("handler_btn")[0];
+// const resetBtn = document.getElementsByClassName("handler_btn")[1];
+
+const startBtn = document.getElementById("start");
+const resetBtn = document.getElementById("reset");
+
+// main-controls__select
+// custom-checkbox
+
+const mainControlsSelect = document.querySelectorAll(".main-controls__select");
+const customCheckboxes = document.querySelectorAll(".custom-checkbox");
+console.log(customCheckboxes);
+const viewsSelect = document.getElementsByName("views-select");
 
 const total = document.getElementsByClassName("total-input")[0];
 const totalCount = document.getElementsByClassName("total-input")[1];
@@ -25,6 +36,22 @@ const start = () => {
   addServices();
   addPrices();
   showResult();
+  inputDisabled();
+};
+// После нажатия на кнопку "рассчитать" все input блокируются,
+// а на месте кнопки "рассчитать" появляется кнопка "сброс"
+const inputDisabled = () => {
+  startBtn.style.display = "none";
+  resetBtn.style.display = "block";
+
+  for (const viewSelect of viewsSelect) {
+    viewSelect.setAttribute("disabled", "");
+    console.log(viewSelect);
+  }
+  for (const customCheckbox of customCheckboxes) {
+    customCheckbox.setAttribute("disabled", "");
+    console.log(customCheckbox);
+  }
 };
 
 //Метод для добавления информации по экранам:
@@ -122,17 +149,6 @@ const showResult = () => {
   totalCountRollback.value = appData.servicePercentPrice; // Полная стоимость с учётом отката
 };
 
-// Сделать так, чтобы после нажатия на кнопку Рассчитать изменение значения input[type=range] меняло и сумму в поле с подписью "Стоимость с учетом отката". Сумма должна пересчитываться с учетом реального значения процента отката. Проверить чтоб значение не менялось до расчета, только после рассчета.
-const rangeDynamic = () => {
-  // Если значения посчитаны, то:
-  if (appData.fullPrice !== 0) {
-    appData.servicePercentPrice = Math.ceil(
-      appData.fullPrice - appData.fullPrice * (appData.rollback / 100)
-    );
-    totalCountRollback.value = appData.servicePercentPrice; // Обновляем значение totalCountRollback.value для функции showResult
-  }
-};
-
 const appData = {
   rollback: 0,
   title: "",
@@ -181,8 +197,8 @@ const appData = {
 
   addRollback: function (event) {
     inputRangeValue.textContent = event.target.value + "%"; // Записываем процент под формой range
-    this.rollback = event.target.value; // Записываем в свойство rollback значение, полученное в range
-    rangeDynamic();
+    appData.rollback = event.target.value; // Записываем в свойство rollback значение, полученное в range
+    appData.rangeDynamic();
   },
 
   // logger: function () {
@@ -214,6 +230,17 @@ const appData = {
         appData.disableButtonCount();
         return;
       }
+    }
+  },
+
+  // Сделать так, чтобы после нажатия на кнопку Рассчитать изменение значения input[type=range] меняло и сумму в поле с подписью "Стоимость с учетом отката". Сумма должна пересчитываться с учетом реального значения процента отката. Проверить чтоб значение не менялось до расчета, только после рассчета.
+  rangeDynamic: function () {
+    // Если значения посчитаны, то:
+    if (appData.fullPrice !== 0) {
+      appData.servicePercentPrice = Math.ceil(
+        appData.fullPrice - appData.fullPrice * (appData.rollback / 100)
+      );
+      totalCountRollback.value = appData.servicePercentPrice; // Обновляем значение totalCountRollback.value для функции showResult
     }
   },
 }; // AppData
