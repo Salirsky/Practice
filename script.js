@@ -17,6 +17,11 @@ const customCheckboxes = document.querySelectorAll(".custom-checkbox");
 const viewsSelect = document.getElementsByName("views-select");
 const viewsInput = document.querySelectorAll(".main-controls__select input");
 
+// console.log(mainControlsSelect);
+// console.log(viewsInput);
+// console.log(viewsSelect);
+// console.log(customCheckboxes);
+
 const total = document.getElementsByClassName("total-input")[0];
 const totalCount = document.getElementsByClassName("total-input")[1];
 const totalCountOther = document.getElementsByClassName("total-input")[2];
@@ -41,12 +46,35 @@ const inputDisabled = () => {
   for (const viewSelect of viewsSelect) {
     viewSelect.setAttribute("disabled", "");
   }
-  for (const viewInput of viewsInput) {
-    viewInput.setAttribute("disabled", "");
-  }
+
+  // for (const viewInput of viewsInput) {
+  //   viewInput.disabled = true;
+  // }
+  // for (const mainControlSelect of mainControlsSelect) {
+  //   mainControlSelect.disabled = true;
+  // }
+  // for (const viewInput of viewsInput) {
+  //   viewInput.setAttribute("disabled", "");
+  // }
+  // for (const mainControlSelect of mainControlsSelect) {
+  //   mainControlSelect.setAttribute("disabled", "");
+  // }
+
   for (const customCheckbox of customCheckboxes) {
     customCheckbox.setAttribute("disabled", "");
   }
+
+  screens.forEach(function (screen, index) {
+    let input = screen.querySelector("input");
+    input.setAttribute("disabled", "");
+    console.log(input);
+  });
+
+  // viewsInput.disabled;
+
+  // viewsInput.disabled = true;
+
+  //viewsInput.setAttribute("disabled", "");
 
   console.log(viewsInput);
   console.log(viewsSelect);
@@ -202,6 +230,9 @@ const appData = {
     appData.rollback = 0;
     inputRange.value = 0;
 
+    appData.fullPrice = 0;
+    appData.servicePercentPrice = 0;
+
     // inputRange.innerHTML = ''
 
     // console.log(inputRange.input);
@@ -219,6 +250,11 @@ const appData = {
       screens[i].querySelector("input").value = "";
     }
 
+    screens.forEach(function (screen, index) {
+      let input = screen.querySelector("input");
+      input.removeAttribute("disabled", "");
+      console.log(input);
+    });
     // appData.screens = [];
   },
 
