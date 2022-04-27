@@ -9,18 +9,11 @@ const otherItemsNumber = document.querySelectorAll(".other-items.number");
 const inputRange = document.querySelector(".rollback input");
 const inputRangeValue = document.querySelector(".rollback .range-value");
 
-// const startBtn = document.getElementsByClassName("handler_btn")[0];
-// const resetBtn = document.getElementsByClassName("handler_btn")[1];
-
 const startBtn = document.getElementById("start");
 const resetBtn = document.getElementById("reset");
 
-// main-controls__select
-// custom-checkbox
-
 const mainControlsSelect = document.querySelectorAll(".main-controls__select");
 const customCheckboxes = document.querySelectorAll(".custom-checkbox");
-console.log(customCheckboxes);
 const viewsSelect = document.getElementsByName("views-select");
 
 const total = document.getElementsByClassName("total-input")[0];
@@ -46,11 +39,9 @@ const inputDisabled = () => {
 
   for (const viewSelect of viewsSelect) {
     viewSelect.setAttribute("disabled", "");
-    console.log(viewSelect);
   }
   for (const customCheckbox of customCheckboxes) {
     customCheckbox.setAttribute("disabled", "");
-    console.log(customCheckbox);
   }
 };
 
@@ -172,6 +163,49 @@ const appData = {
     inputRange.addEventListener("input", this.addRollback);
     // Изначально кнопка отключена
     this.disableButtonCount();
+    resetBtn.addEventListener("click", this.reset);
+  },
+
+  reset: function () {
+    startBtn.style.display = "block";
+    resetBtn.style.display = "none";
+
+    for (const viewSelect of viewsSelect) {
+      viewSelect.removeAttribute("disabled");
+    }
+    for (const customCheckbox of customCheckboxes) {
+      customCheckbox.checked = false;
+    }
+
+    total.value = 0;
+    totalCount.value = 0;
+    totalCountOther.value = 0;
+    fullTotalCount.value = 0;
+    totalCountRollback.value = 0;
+    appData.screens = 0;
+
+    console.log(appData.rollback);
+
+    //appData.rollback = 0;
+    //appData.rollback.input.value = "";
+
+    console.log(inputRange);
+
+    inputRangeValue.textContent = 0;
+    appData.rollback = 0;
+    inputRange.value = 0;
+
+    // inputRange.innerHTML = ''
+
+    // console.log(inputRange.input);
+    // console.log(inputRange.input.value);
+
+    //inputRange.input.value = "";
+    //console.log(this.rollback);
+
+    // this.rollback.input.value = 0;
+
+    // inputRange.setAttribute('value="0"');
   },
 
   addTitle: function () {
@@ -198,7 +232,12 @@ const appData = {
   addRollback: function (event) {
     inputRangeValue.textContent = event.target.value + "%"; // Записываем процент под формой range
     appData.rollback = event.target.value; // Записываем в свойство rollback значение, полученное в range
-    appData.rangeDynamic();
+    if (appData.fullPrice !== 0) {
+      appData.servicePercentPrice = Math.ceil(
+        appData.fullPrice - appData.fullPrice * (appData.rollback / 100)
+      );
+      totalCountRollback.value = appData.servicePercentPrice; // Обновляем значение totalCountRollback.value для функции showResult
+    }
   },
 
   // logger: function () {
@@ -234,15 +273,10 @@ const appData = {
   },
 
   // Сделать так, чтобы после нажатия на кнопку Рассчитать изменение значения input[type=range] меняло и сумму в поле с подписью "Стоимость с учетом отката". Сумма должна пересчитываться с учетом реального значения процента отката. Проверить чтоб значение не менялось до расчета, только после рассчета.
-  rangeDynamic: function () {
-    // Если значения посчитаны, то:
-    if (appData.fullPrice !== 0) {
-      appData.servicePercentPrice = Math.ceil(
-        appData.fullPrice - appData.fullPrice * (appData.rollback / 100)
-      );
-      totalCountRollback.value = appData.servicePercentPrice; // Обновляем значение totalCountRollback.value для функции showResult
-    }
-  },
+  // rangeDynamic: function () {
+  //   // Если значения посчитаны, то:
+
+  // },
 }; // AppData
 
 appData.init();
