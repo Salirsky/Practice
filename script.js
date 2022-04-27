@@ -15,12 +15,6 @@ const resetBtn = document.getElementById("reset");
 const mainControlsSelect = document.querySelectorAll(".main-controls__select");
 const customCheckboxes = document.querySelectorAll(".custom-checkbox");
 const viewsSelect = document.getElementsByName("views-select");
-const viewsInput = document.querySelectorAll(".main-controls__select input");
-
-// console.log(mainControlsSelect);
-// console.log(viewsInput);
-// console.log(viewsSelect);
-// console.log(customCheckboxes);
 
 const total = document.getElementsByClassName("total-input")[0];
 const totalCount = document.getElementsByClassName("total-input")[1];
@@ -47,19 +41,6 @@ const inputDisabled = () => {
     viewSelect.setAttribute("disabled", "");
   }
 
-  // for (const viewInput of viewsInput) {
-  //   viewInput.disabled = true;
-  // }
-  // for (const mainControlSelect of mainControlsSelect) {
-  //   mainControlSelect.disabled = true;
-  // }
-  // for (const viewInput of viewsInput) {
-  //   viewInput.setAttribute("disabled", "");
-  // }
-  // for (const mainControlSelect of mainControlsSelect) {
-  //   mainControlSelect.setAttribute("disabled", "");
-  // }
-
   for (const customCheckbox of customCheckboxes) {
     customCheckbox.setAttribute("disabled", "");
   }
@@ -69,15 +50,6 @@ const inputDisabled = () => {
     input.setAttribute("disabled", "");
     console.log(input);
   });
-
-  // viewsInput.disabled;
-
-  // viewsInput.disabled = true;
-
-  //viewsInput.setAttribute("disabled", "");
-
-  console.log(viewsInput);
-  console.log(viewsSelect);
 };
 
 //Метод для добавления информации по экранам:
@@ -219,31 +191,12 @@ const appData = {
     fullTotalCount.value = 0;
     totalCountRollback.value = 0;
 
-    //console.log(appData.rollback);
-
-    //appData.rollback = 0;
-    //appData.rollback.input.value = "";
-
-    //console.log(inputRange);
-
     inputRangeValue.textContent = 0;
     appData.rollback = 0;
     inputRange.value = 0;
 
     appData.fullPrice = 0;
     appData.servicePercentPrice = 0;
-
-    // inputRange.innerHTML = ''
-
-    // console.log(inputRange.input);
-    // console.log(inputRange.input.value);
-
-    //inputRange.input.value = "";
-    //console.log(this.rollback);
-
-    // this.rollback.input.value = 0;
-
-    // inputRange.setAttribute('value="0"');
 
     for (i = 0; i < screens.length; i++) {
       screens[i].querySelector("select").selectedIndex = 0;
@@ -255,7 +208,6 @@ const appData = {
       input.removeAttribute("disabled", "");
       console.log(input);
     });
-    // appData.screens = [];
   },
 
   addTitle: function () {
