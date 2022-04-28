@@ -23,6 +23,8 @@ const fullTotalCount = document.getElementsByClassName("total-input")[3];
 const totalCountRollback = document.getElementsByClassName("total-input")[4];
 
 let screens = document.querySelectorAll(".screen");
+const checkboxCMS = document.getElementById("cms-open");
+const hiddenSelectCMS = document.querySelector(".hidden-cms-variants");
 
 const start = () => {
   addScreens();
@@ -171,6 +173,11 @@ const appData = {
     // Изначально кнопка отключена
     this.disableButtonCount();
     resetBtn.addEventListener("click", this.reset);
+    checkboxCMS.addEventListener("click", appData.openCheckbox);
+  },
+
+  openCheckbox: function () {
+    hiddenSelectCMS.style.display = "flex";
   },
 
   reset: function () {
@@ -277,17 +284,11 @@ const appData = {
 
 appData.init();
 
-// 1) Перевести все функции, которые возможно, в вызов через This
+// 1) В нашем проекте (в верстке) есть input[type=checkbox] с id=cms-open. При его выборе должен открываться блок с классом hidden-cms-variants.
+// Внимание, блоку с классом hidden-cms-variants необходимо добавлять свойство display: flex, а не display: block.
+// 2) При выборе option с значением "Другое" (value=other) должен открываться блок с классом main-controls__input, но только тот, что внутри блока с классом hidden-cms-variants (ВНИМАНИЕ, блоков с классом main-controls__input в проекте много, искать стоит внутри определенного элемента)
+// 3) Если в input[type=checkbox] выбран вариант с числовым value (value=50) то высчитываем общую стоимость работы с учетом данного value. Значение - процент от общей стоимости работы
 
-// 2) То, что можно, перевести в стрелочные функции
+// Пример: общая стоимость работы равна 30.000. При выборе варианта WordPress с value=50 стоимость работы рассчитывается так: 30.000 + 15.000 = 45.000 (15.000 это 50% от 30.000)
 
-// 3) Блокировать (свойство disabled) все input[type=text] и select с левой стороны после нажатия кнопки Рассчитать, после этого кнопка Рассчитать пропадает и появляется кнопка Сброс (id=reset)
-
-// 4) В объекте реализовать метод reset(), срабатывающий по нажатию на кнопку Сброс. Метод reset() должен привести объект к исходному состоянию:
-
-// Кнопка Сброс должна замениться на кнопку Рассчитать
-// Должны быть убраны все дополнительные элементы (которые добавлялись динамически) и значения полей ввода
-// Все input[type=text] и select должны быть разблокированы
-
-// Метод reset должен всю программу возвращать в исходное состояние
-// Метод reset() пишем самостоятельно, никаких перезагрузок страницы. Метод должен быть расписан наподобие start().
+// 4) При нажатии на кнопку Сброс метод reset() должен возвращать в исходное состояние и блок с классом hidden-cms-variants
