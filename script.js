@@ -25,6 +25,11 @@ const totalCountRollback = document.getElementsByClassName("total-input")[4];
 let screens = document.querySelectorAll(".screen");
 const checkboxCMS = document.getElementById("cms-open");
 const hiddenSelectCMS = document.querySelector(".hidden-cms-variants");
+//const selectCMS = document.getElementById("cms-select");
+const selectCMS = document.querySelectorAll(".cms-select");
+const otherCMS = document.querySelector(
+  ".hidden-cms-variants .main-controls__input"
+);
 
 const start = () => {
   addScreens();
@@ -50,7 +55,7 @@ const inputDisabled = () => {
   screens.forEach(function (screen, index) {
     let input = screen.querySelector("input");
     input.setAttribute("disabled", "");
-    console.log(input);
+    //console.log(input);
   });
 };
 
@@ -173,11 +178,25 @@ const appData = {
     // Изначально кнопка отключена
     this.disableButtonCount();
     resetBtn.addEventListener("click", this.reset);
-    checkboxCMS.addEventListener("click", appData.openCheckbox);
+    checkboxCMS.addEventListener("click", this.openCheckbox);
+    selectCMS[0].addEventListener("change", this.otherCMS);
   },
 
   openCheckbox: function () {
     hiddenSelectCMS.style.display = "flex";
+  },
+
+  otherCMS: function () {
+    //console.log(selectCMS); // сейчас мы получаем весь этот HTML-элемент
+    // Чтобы достать каждый option, нужно перебрать весь select
+
+    for (let i = 0; i < selectCMS.length; i++) {
+      const index = selectCMS[i].querySelector("select").selectedIndex;
+      console.log(index);
+      if (index === 2) {
+        otherCMS.style.display = "flex";
+      }
+    }
   },
 
   reset: function () {
@@ -205,7 +224,7 @@ const appData = {
     appData.fullPrice = 0;
     appData.servicePercentPrice = 0;
 
-    for (i = 0; i < screens.length; i++) {
+    for (let i = 0; i < screens.length; i++) {
       screens[i].querySelector("select").selectedIndex = 0;
       screens[i].querySelector("input").value = "";
     }
@@ -213,7 +232,7 @@ const appData = {
     screens.forEach(function (screen, index) {
       let input = screen.querySelector("input");
       input.removeAttribute("disabled", "");
-      console.log(input);
+      //console.log(input);
     });
   },
 
@@ -269,7 +288,7 @@ const appData = {
 
   // Функция проверки условия заполненности формы информации по экранам
   conditionCheck: function () {
-    for (i = 0; i < screens.length; i++) {
+    for (let i = 0; i < screens.length; i++) {
       const index = screens[i].querySelector("select").selectedIndex;
       const input = +screens[i].querySelector("input").value;
       if (index !== 0 && input > 0) {
