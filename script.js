@@ -25,7 +25,6 @@ const totalCountRollback = document.getElementsByClassName("total-input")[4];
 let screens = document.querySelectorAll(".screen");
 const checkboxCMS = document.getElementById("cms-open");
 const hiddenSelectCMS = document.querySelector(".hidden-cms-variants");
-//const selectCMS = document.getElementById("cms-select");
 const selectCMS = document.querySelectorAll(".cms-select");
 const otherCMS = document.querySelector(
   ".hidden-cms-variants .main-controls__input"
@@ -276,7 +275,8 @@ const appData = {
       appData.servicePercentPrice = Math.ceil(
         appData.fullPrice - appData.fullPrice * (appData.rollback / 100)
       );
-      totalCountRollback.value = appData.servicePercentPrice; // Обновляем значение totalCountRollback.value для функции showResult
+      // Обновляем значение totalCountRollback.value для функции showResult
+      totalCountRollback.value = appData.servicePercentPrice;
     }
   },
 
