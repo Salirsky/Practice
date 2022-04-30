@@ -30,6 +30,7 @@ const selectCMS = document.querySelectorAll(".cms-select");
 const otherCMS = document.querySelector(
   ".hidden-cms-variants .main-controls__input"
 );
+const otherInputCMS = document.getElementById("cms-other-input");
 
 const start = () => {
   addScreens();
@@ -52,11 +53,12 @@ const inputDisabled = () => {
     customCheckbox.setAttribute("disabled", "");
   }
 
-  screens.forEach(function (screen, index) {
+  screens.forEach(function (screen) {
     let input = screen.querySelector("input");
     input.setAttribute("disabled", "");
-    //console.log(input);
   });
+
+  otherInputCMS.setAttribute("disabled", "");
 };
 
 //Метод для добавления информации по экранам:
@@ -113,13 +115,14 @@ const addServices = () => {
   });
 };
 
-// Этот метод будет заниматься высчитыванием стоимости услуг и экранов
+// Расчёты стоимости услуг и экранов
 const addPrices = () => {
   appData.screenPrice = 0;
   appData.servicePricesNumber = 0;
   appData.servicePricesPercent = 0;
   appData.fullPrice = 0;
   appData.servicePercentPrice = 0;
+  appData.cmsPercent = 0;
 
   for (let screen of appData.screens) {
     appData.screenPrice += screen.price;
@@ -134,10 +137,16 @@ const addPrices = () => {
       appData.screenPrice * (appData.servicesPercent[key] / 100);
   }
 
+  appData.cmsPercent = +otherInputCMS.value;
+
   appData.fullPrice =
     appData.screenPrice +
     appData.servicePricesPercent +
-    appData.servicePricesNumber;
+    appData.servicePricesNumber +
+    (appData.screenPrice +
+      appData.servicePricesPercent +
+      appData.servicePricesNumber) *
+      (appData.cmsPercent / 100);
 
   appData.servicePercentPrice = Math.ceil(
     appData.fullPrice - appData.fullPrice * (appData.rollback / 100)
@@ -167,6 +176,7 @@ const appData = {
   servicePercentPrice: 0,
   servicesPercent: {},
   servicesNumber: {},
+  cmsPercent: 0,
 
   init: function () {
     this.addTitle();
@@ -182,17 +192,17 @@ const appData = {
     selectCMS[0].addEventListener("change", this.otherCMS);
   },
 
+  // Открываем скрытую менюшку CMS
   openCheckbox: function () {
     hiddenSelectCMS.style.display = "flex";
   },
 
+  // Открываем скрытую форму при выборе "другое"
   otherCMS: function () {
     //console.log(selectCMS); // сейчас мы получаем весь этот HTML-элемент
     // Чтобы достать каждый option, нужно перебрать весь select
-
     for (let i = 0; i < selectCMS.length; i++) {
       const index = selectCMS[i].querySelector("select").selectedIndex;
-      console.log(index);
       if (index === 2) {
         otherCMS.style.display = "flex";
       }
@@ -202,6 +212,7 @@ const appData = {
   reset: function () {
     startBtn.style.display = "block";
     resetBtn.style.display = "none";
+    hiddenSelectCMS.style.display = "none";
 
     for (const viewSelect of viewsSelect) {
       viewSelect.removeAttribute("disabled");
@@ -210,6 +221,8 @@ const appData = {
       customCheckbox.checked = false;
       customCheckbox.removeAttribute("disabled");
     }
+
+    otherInputCMS.removeAttribute("disabled", "");
 
     total.value = 0;
     totalCount.value = 0;
@@ -229,10 +242,9 @@ const appData = {
       screens[i].querySelector("input").value = "";
     }
 
-    screens.forEach(function (screen, index) {
+    screens.forEach(function (screen) {
       let input = screen.querySelector("input");
       input.removeAttribute("disabled", "");
-      //console.log(input);
     });
   },
 
@@ -274,13 +286,13 @@ const appData = {
   //   console.log(appData.screens);
   // },
 
-  // Отключаем работу кнопки
+  // Отключаем работу кнопки 'рассчитать'
   disableButtonCount: function () {
     startBtn.style.backgroundColor = "#777777";
     startBtn.removeEventListener("click", start);
   },
 
-  // Включаем работу кнопки
+  // Включаем работу кнопки 'рассчитать'
   enableButtonCount: function () {
     startBtn.style.backgroundColor = "#A52A2A";
     startBtn.addEventListener("click", start);
@@ -302,12 +314,3 @@ const appData = {
 }; // AppData
 
 appData.init();
-
-// 1) В нашем проекте (в верстке) есть input[type=checkbox] с id=cms-open. При его выборе должен открываться блок с классом hidden-cms-variants.
-// Внимание, блоку с классом hidden-cms-variants необходимо добавлять свойство display: flex, а не display: block.
-// 2) При выборе option с значением "Другое" (value=other) должен открываться блок с классом main-controls__input, но только тот, что внутри блока с классом hidden-cms-variants (ВНИМАНИЕ, блоков с классом main-controls__input в проекте много, искать стоит внутри определенного элемента)
-// 3) Если в input[type=checkbox] выбран вариант с числовым value (value=50) то высчитываем общую стоимость работы с учетом данного value. Значение - процент от общей стоимости работы
-
-// Пример: общая стоимость работы равна 30.000. При выборе варианта WordPress с value=50 стоимость работы рассчитывается так: 30.000 + 15.000 = 45.000 (15.000 это 50% от 30.000)
-
-// 4) При нажатии на кнопку Сброс метод reset() должен возвращать в исходное состояние и блок с классом hidden-cms-variants
