@@ -1,3 +1,4 @@
+
 "Use strict";
 
 const title = document.getElementsByTagName("h1")[0];
@@ -25,7 +26,6 @@ const totalCountRollback = document.getElementsByClassName("total-input")[4];
 let screens = document.querySelectorAll(".screen");
 const checkboxCMS = document.getElementById("cms-open");
 const hiddenSelectCMS = document.querySelector(".hidden-cms-variants");
-//const selectCMS = document.getElementById("cms-select");
 const selectCMS = document.querySelectorAll(".cms-select");
 const otherCMS = document.querySelector(
   ".hidden-cms-variants .main-controls__input"
@@ -314,3 +314,4 @@ const appData = {
 }; // AppData
 
 appData.init();
+
